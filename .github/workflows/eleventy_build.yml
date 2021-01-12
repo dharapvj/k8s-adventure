@@ -2,7 +2,7 @@ name: Eleventy Build
 on:
   push:
     branches:
-      - source  # default branch
+      - main  # default branch
 
 jobs:
   build_deploy:
@@ -19,4 +19,4 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./_site
-          publish_branch: master  # deploying branch
+          publish_branch: gh_pages  # deploying branch
