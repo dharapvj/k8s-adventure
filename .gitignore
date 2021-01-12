@@ -1,0 +1,7 @@
+_site
+node_modules
+.kube
+src/kkp/charts/
+.terraform
+terraform.tfstate
+.terraform.lock.hcl
