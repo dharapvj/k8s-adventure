@@ -1,0 +1,8 @@
+<p>https://docs.kubermatic.com/kubeone/master/quick_start/</p>
+<p>export AWS_PROFILE=vj
+eval <code>ssh-agent</code>
+ssh-add ~/.ssh/dharapvv.pem
+terraform plan
+terraform apply
+terraform output -json &gt; tf.json
+kubeone apply --manifest kubeone.yaml -t tf.json</p>

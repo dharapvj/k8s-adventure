@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link href="/css/prism-vsc-dark-plus.css" rel="stylesheet" type="text/css">
+    <link href="/css/blog.css" rel="stylesheet" type="text/css">
+  <title>dharapvj Personal Page - My Kubernetes Adventures</title>
+</head>
+
+<body>
+  <header>
+  <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
+    <div class="container">
+      <a class="navbar-brand" href="/index.html">dharapvj's Personal Page</a>
+      <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        Menu
+        <i class="fas fa-bars"></i>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="/">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/about/">About</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/contact/">Contact</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  </header>
+  <!-- <section class="masthead">
+    <div class="container">
+      <h1 class="title"> My Kubernetes Adventures </h1>
+      <div class="author"> by Vijay Dharap </div>
+      <div class="ts"> <span> July 23, 2020 </span> / <span>more,tags</span></div>  
+    </div>
+  </section> -->
+  <section class="main">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-9 col-md-10 mx-auto">
+          <h1>My Kubernetes Adventures</h1>
+<h2>Setting up your developer environment terminal</h2>
+<ul>
+<li>bash profile settings</li>
+<li>byobu</li>
+<li>Kubernetes tools - kubectl, helm</li>
+<li>kubectx, kubens, kube-ps1, k, complete alias</li>
+<li>Free Root DNS</li>
+<li>Things to setup in AWS Account e.g. Route53 hosted zone</li>
+<li>Things to setup in Azure Account</li>
+<li>your common ssh-key for nodes</li>
+</ul>
+<h1>Installation of Simpler trial Kubernetes Distributions</h1>
+<ul>
+<li>k3s</li>
+<li>Minikube</li>
+<li>Kind</li>
+</ul>
+<h1>Typical things to validate various Kubernetes features</h1>
+<ul>
+<li>Ingress Controller</li>
+<li>Kubernetes Dashboard</li>
+<li>Monitoring</li>
+<li>podinfo deployment</li>
+<li>Autoscaling testing (both HPA and cluster)</li>
+<li>Storage testing</li>
+</ul>
+<h2>Installation of Production Grade Kubernetes Distributions</h2>
+<ul>
+<li>KOPS</li>
+<li>EKS</li>
+<li>AKS</li>
+<li>Kubermatic KubeOne</li>
+<li>Kubespray</li>
+</ul>
+<h2>Installation of Multi-cluster Managers</h2>
+<ul>
+<li>Kubermatic Kubernetes Platform (kkp)</li>
+<li>Rancher (To be added)</li>
+</ul>
+<h2>Explored Features</h2>
+<h3>Storage</h3>
+<ul>
+<li>Longhorn (on AWS KOPS)</li>
+<li>EFS</li>
+</ul>
+<h3>Security</h3>
+<ul>
+<li>Using Hashicorp Vault for secrets. (Usage via In-cluster installation with Consul)</li>
+</ul>
+<h3>Auto-scaling</h3>
+<ul>
+<li>Pod Autoscaling via Horizontal Pod Autoscaler ( KOPS, EKS)</li>
+<li>Node autoscaling via Cluster Autoscaler (EKS)</li>
+</ul>
+<h3>WIP ( External-DNS setup)</h3>
+<h3>WIP Access cloud resouces via kube2iam / aad-pod-identity / gke workload identity etc</h3>
+<p>{#</p>
+<h1>My Kubernetes Adventures</h1>
+<p>Demo of Eleventy based static site. This content is written using markdown file. The source of this file is present in source branch. Source branch is also the default branch for this repo.</p>
+<h2>Code Syntax highlighting</h2>
+<p>Below block is highlighted for JS syntax. Eleventy uses prism as the syntax highlighter. You can use bunch themes with prism highlighter. Check css directory for few.</p>
+<pre class="language-javascript"><code class="language-javascript"><span class="token comment">// https://github.com/preactjs/preact/blob/master/src/component.js</span><br><br><span class="token comment">/**<br> * Base Component class. Provides `setState()` and `forceUpdate()`, which<br> * trigger rendering<br> * @param {object} props The initial component props<br> */</span><br><span class="token keyword">export</span> <span class="token keyword">function</span> <span class="token function">Component</span><span class="token punctuation">(</span><span class="token parameter">props<span class="token punctuation">,</span> context</span><span class="token punctuation">)</span> <span class="token punctuation">{</span><br>	<span class="token keyword">this</span><span class="token punctuation">.</span>props <span class="token operator">=</span> props<span class="token punctuation">;</span><br>	<span class="token keyword">this</span><span class="token punctuation">.</span>context <span class="token operator">=</span> context<span class="token punctuation">;</span><br><span class="token punctuation">}</span></code></pre>
+<h2>Table</h2>
+<p>Below table can help you understand how to read the code to understand how this usecase was implemented.</p>
+<table class="table table-striped">
+<thead>
+<tr>
+<th>File</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>index.md</td>
+<td>This is file which generated the html you are reading.</td>
+</tr>
+<tr>
+<td>layout2.njk</td>
+<td>TBD</td>
+</tr>
+</tbody>
+</table>
+<p>More information on how to add custom classes in markdown-it is available <a href="https://www.npmjs.com/package/@toycode/markdown-it-class">here</a>. In this section the table is added a custom class mapping to give it stripes. Configuration is available in <code>.eleventy.js</code> file</p>
+<h2>Column splitting</h2>
+<div class="multicolumn" style="display: flex; flex-direction: row; align-items: flex-start;">
+<div class="multicolumn-column" style="flex-grow: 2; flex-basis:0;">
+<h3>First column</h3>
+<p>This column gets 2/3 of total width.</p>
+<p><img src="/img/pets/1.jpg" alt="kitten 1" class="special markImg">
+<img src="/img/pets/2.jpg" alt="kitten 2" class="special markImg">
+<img src="/img/pets/3.jpg" alt="kitten 3" class="special markImg"></p>
+</div>
+<div class="multicolumn-column" style="flex-grow: 1; flex-basis:0;">
+<h3>second column:</h3>
+<ul>
+<li>This column takes 1/3 of the total width available for the main container.</li>
+<li>This sections also shows how to include images in the page</li>
+<li>More info on column splitting in markdown <a href="https://www.npmjs.com/package/markdown-it-multicolumn">here</a>.</li>
+</ul>
+</div>
+</div>
+<h2 class="custom-header">Custom styling the header</h2>
+<p>Can also work with inline text. <em class="hvr-overline-from-left diff-color">Hover over me</em>.
+This type of custom classes called <code>.special</code> is also added to the kitten images above.
+More info on how to add custom attributes including classes to markdown is available <a href="https://www.npmjs.com/package/markdown-it-attrs">here</a>.</p>
+<p>#}</p>
+
+        </div>
+        <div class="col-lg-3 col-md-2 mx-auto">
+          <div>Categories</div>
+          <ul>
+          
+            <li>more</li>
+          
+            <li>tags</li>
+          
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+  <footer><div class="container"><div class="row"><div class="col-12">
+    &copy; 2020. All right reserved. Vijay Dharap.
+  </div></div></div></footer>
+</body>
+
+</html>

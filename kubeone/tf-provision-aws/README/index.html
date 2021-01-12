@@ -1,0 +1,230 @@
+<h1>AWS Quickstart Terraform configs</h1>
+<p>The AWS Quickstart Terraform configs can be used to create the needed
+infrastructure for a Kubernetes HA cluster. Check out the
+<a href="https://docs.kubermatic.com/kubeone/master/infrastructure/terraform_configs/">Creating Infrastructure guide</a> to learn more about how to
+use the configs and how to provision a Kubernetes cluster using KubeOne.</p>
+<h2>Requirements</h2>
+<table class="table table-striped">
+<thead>
+<tr>
+<th>Name</th>
+<th>Version</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>terraform</td>
+<td>&gt;= 0.12.10</td>
+</tr>
+</tbody>
+</table>
+<h2>Providers</h2>
+<table class="table table-striped">
+<thead>
+<tr>
+<th>Name</th>
+<th>Version</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>aws</td>
+<td>n/a</td>
+</tr>
+<tr>
+<td>random</td>
+<td>n/a</td>
+</tr>
+</tbody>
+</table>
+<h2>Inputs</h2>
+<table class="table table-striped">
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+<th>Type</th>
+<th>Default</th>
+<th style="text-align:center">Required</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ami</td>
+<td>AMI ID, use it to fixate control-plane AMI in order to avoid force-recreation it at later times</td>
+<td><code>string</code></td>
+<td><code>&quot;&quot;</code></td>
+<td style="text-align:center">no</td>
+</tr>
+<tr>
+<td>ami_filters</td>
+<td>map with AMI filters</td>
+<td><code>map</code></td>
+<td><pre>{<br>  &quot;centos&quot;: {<br>    &quot;image_name&quot;: [<br>      &quot;CentOS Linux 7 x86_64 HVM EBS*&quot;<br>    ],<br>    &quot;owners&quot;: [<br>      &quot;679593333241&quot;<br>    ]<br>  },<br>  &quot;flatcar&quot;: {<br>    &quot;image_name&quot;: [<br>      &quot;Flatcar-stable-<em>-hvm&quot;<br>    ],<br>    &quot;owners&quot;: [<br>      &quot;075585003325&quot;<br>    ]<br>  },<br>  &quot;rhel&quot;: {<br>    &quot;image_name&quot;: [<br>      &quot;RHEL-8</em>_HVM-<em>-x86_64-</em>&quot;<br>    ],<br>    &quot;owners&quot;: [<br>      &quot;309956199498&quot;<br>    ]<br>  },<br>  &quot;ubuntu&quot;: {<br>    &quot;image_name&quot;: [<br>      &quot;ubuntu/images/hvm-ssd/ubuntu-bionic-18.04-amd64-server-*&quot;<br>    ],<br>    &quot;owners&quot;: [<br>      &quot;099720109477&quot;<br>    ]<br>  }<br>}</pre></td>
+<td style="text-align:center">no</td>
+</tr>
+<tr>
+<td>aws_region</td>
+<td>AWS region to speak to</td>
+<td><code>string</code></td>
+<td><code>&quot;eu-west-3&quot;</code></td>
+<td style="text-align:center">no</td>
+</tr>
+<tr>
+<td>bastion_port</td>
+<td>Bastion SSH port</td>
+<td><code>number</code></td>
+<td><code>22</code></td>
+<td style="text-align:center">no</td>
+</tr>
+<tr>
+<td>bastion_type</td>
+<td>instance type for bastion</td>
+<td><code>string</code></td>
+<td><code>&quot;t3.nano&quot;</code></td>
+<td style="text-align:center">no</td>
+</tr>
+<tr>
+<td>bastion_user</td>
+<td>Bastion SSH username</td>
+<td><code>string</code></td>
+<td><code>&quot;ubuntu&quot;</code></td>
+<td style="text-align:center">no</td>
+</tr>
+<tr>
+<td>cluster_name</td>
+<td>Name of the cluster</td>
+<td><code>any</code></td>
+<td>n/a</td>
+<td style="text-align:center">yes</td>
+</tr>
+<tr>
+<td>control_plane_type</td>
+<td>AWS instance type</td>
+<td><code>string</code></td>
+<td><code>&quot;t3.medium&quot;</code></td>
+<td style="text-align:center">no</td>
+</tr>
+<tr>
+<td>control_plane_volume_size</td>
+<td>Size of the EBS volume, in Gb</td>
+<td><code>number</code></td>
+<td><code>100</code></td>
+<td style="text-align:center">no</td>
+</tr>
+<tr>
+<td>initial_machinedeployment_replicas</td>
+<td>number of replicas per MachineDeployment</td>
+<td><code>number</code></td>
+<td><code>1</code></td>
+<td style="text-align:center">no</td>
+</tr>
+<tr>
+<td>internal_api_lb</td>
+<td>make kubernetes API loadbalancer internal (reachible only from inside the VPC)</td>
+<td><code>bool</code></td>
+<td><code>false</code></td>
+<td style="text-align:center">no</td>
+</tr>
+<tr>
+<td>open_nodeports</td>
+<td>open NodePorts flag</td>
+<td><code>bool</code></td>
+<td><code>false</code></td>
+<td style="text-align:center">no</td>
+</tr>
+<tr>
+<td>os</td>
+<td>Operating System to use in AMI filtering and MachineDeployment</td>
+<td><code>string</code></td>
+<td><code>&quot;ubuntu&quot;</code></td>
+<td style="text-align:center">no</td>
+</tr>
+<tr>
+<td>ssh_agent_socket</td>
+<td>SSH Agent socket, default to grab from $SSH_AUTH_SOCK</td>
+<td><code>string</code></td>
+<td><code>&quot;env:SSH_AUTH_SOCK&quot;</code></td>
+<td style="text-align:center">no</td>
+</tr>
+<tr>
+<td>ssh_port</td>
+<td>SSH port to be used to provision instances</td>
+<td><code>number</code></td>
+<td><code>22</code></td>
+<td style="text-align:center">no</td>
+</tr>
+<tr>
+<td>ssh_private_key_file</td>
+<td>SSH private key file used to access instances</td>
+<td><code>string</code></td>
+<td><code>&quot;&quot;</code></td>
+<td style="text-align:center">no</td>
+</tr>
+<tr>
+<td>ssh_public_key_file</td>
+<td>SSH public key file</td>
+<td><code>string</code></td>
+<td><code>&quot;~/.ssh/id_rsa.pub&quot;</code></td>
+<td style="text-align:center">no</td>
+</tr>
+<tr>
+<td>ssh_username</td>
+<td>SSH user, used only in output</td>
+<td><code>string</code></td>
+<td><code>&quot;ubuntu&quot;</code></td>
+<td style="text-align:center">no</td>
+</tr>
+<tr>
+<td>subnets_cidr</td>
+<td>CIDR mask bits per subnet</td>
+<td><code>number</code></td>
+<td><code>24</code></td>
+<td style="text-align:center">no</td>
+</tr>
+<tr>
+<td>vpc_id</td>
+<td>VPC to use ('default' for default VPC)</td>
+<td><code>string</code></td>
+<td><code>&quot;default&quot;</code></td>
+<td style="text-align:center">no</td>
+</tr>
+<tr>
+<td>worker_os</td>
+<td>OS to run on worker machines, default to var.os</td>
+<td><code>string</code></td>
+<td><code>&quot;&quot;</code></td>
+<td style="text-align:center">no</td>
+</tr>
+<tr>
+<td>worker_type</td>
+<td>instance type for workers</td>
+<td><code>string</code></td>
+<td><code>&quot;t3.medium&quot;</code></td>
+<td style="text-align:center">no</td>
+</tr>
+</tbody>
+</table>
+<h2>Outputs</h2>
+<table class="table table-striped">
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>kubeone_api</td>
+<td>kube-apiserver LB endpoint</td>
+</tr>
+<tr>
+<td>kubeone_hosts</td>
+<td>Control plane endpoints to SSH to</td>
+</tr>
+<tr>
+<td>kubeone_workers</td>
+<td>Workers definitions, that will be transformed into MachineDeployment object</td>
+</tr>
+</tbody>
+</table>
