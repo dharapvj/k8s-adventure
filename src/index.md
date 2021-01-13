@@ -1,6 +1,6 @@
 ---
 layout: layout2.njk
-title: My Kubernetes Adventures
+title: Home
 author: Vijay Dharap
 timestamp: July 23, 2020 
 tags: [more, tags]
@@ -10,7 +10,7 @@ tags: [more, tags]
 
 ## Setting up your developer environment terminal
 * [bash profile settings](./bash-settings)
-* byobu
+* [byobu](./byobu)
 * Kubernetes tools - kubectl, helm
 * kubectx, kubens, kube-ps1, k, complete alias
 * Free Root DNS
@@ -32,7 +32,7 @@ tags: [more, tags]
 * Storage testing
 
 ## Installation of Production Grade Kubernetes Distributions
-* KOPS
+* [KOPS](./kops)
 * EKS
 * AKS
 * Kubermatic KubeOne
