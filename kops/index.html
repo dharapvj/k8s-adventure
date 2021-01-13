@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link href="/css/prism-vsc-dark-plus.css" rel="stylesheet" type="text/css">
+    <link href="/css/blog.css" rel="stylesheet" type="text/css">
+  <title>My Kubernetes Adventures - KOPS - Kubernetes OPerationS</title>
+</head>
+
+<body>
+  <header>
+  <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
+    <div class="container">
+      <a class="navbar-brand" href="/index.html">My Kubernetes Adventures</a>
+      <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        Menu
+        <i class="fas fa-bars"></i>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="/">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/about/">About</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/contact/">Contact</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  </header>
+  <!-- <section class="masthead">
+    <div class="container">
+      <h1 class="title"> Kops - Kubernetes Operations </h1>
+      <div class="author"> by Vijay Dharap </div>
+      <div class="ts"> <span> July 23, 2020 </span> / <span>kubernetes,distribution,production-grade</span></div>  
+    </div>
+  </section> -->
+  <section class="main">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-9 col-md-10 mx-auto">
+          <h1>KOPS - Kubernetes OPerationS</h1>
+<p><a href="https://kops.sigs.k8s.io/">KOPS</a> is my favourite goto tool to setup full fledged Kubernetes distribution in matter of 5-6 minutes. KOPS has a lot of customization options so you can easily create a production grade kubernetes infrastructure in KOPS. Cluster upgrade, cluster autoscaling, etc. are also supported via configuration changes via <a href="https://kops.sigs.k8s.io/addons/">addons</a>. All the changes can be previewed first (dry-run) and then applied to cluster.</p>
+<p>Important points about KOPS:</p>
+<ul>
+<li>KOPS supports AWS and GKE cloud only.</li>
+<li>It also supports public and private clusters.</li>
+<li>KOPS creates AutoScalingGroups (in AWS) for master and for nodes. You can easily scale horizontally and vertically by changing ASG (via <a href="https://kops.sigs.k8s.io/cli/kops/">KOPS CLI</a>. Direct AWS change are not required and recommended).</li>
+<li>All the changes in KOPS are expected to done via configuration changes. Entire configuration is expressed via YAML. Detaild documentation of cluster API is <a href="https://kops.sigs.k8s.io/cluster_spec/">here</a>.</li>
+</ul>
+<p>Below cheatsheet can help you get kubernetes cluster created in AWS by running 5-6 commands.</p>
+<pre class="language-shell"><code class="language-shell"><span class="token comment"># read more here</span><br>https://kops.sigs.k8s.io/getting_started/aws<br> <br><span class="token comment"># name of your cluster. .k8s.local means private cluster</span><br><span class="token builtin class-name">export</span> <span class="token assign-left variable">NAME</span><span class="token operator">=</span>kopsdemo.k8s.local<br><br><span class="token comment"># must create one bucket for storage of kops artifacts.. and provide its reference below. Below bucket is my bucket. You must create your own.</span><br><span class="token builtin class-name">export</span> <span class="token assign-left variable">KOPS_STATE_STORE</span><span class="token operator">=</span>s3://kops-sample-state-store<br><br><span class="token comment"># AWS credentials for KOPS to use.. You can use AWS_PROFILE / AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY combination. The IAM user must have [sufficient](https://kops.sigs.k8s.io/getting_started/aws/#setup-iam-user) permissions.</span><br><span class="token builtin class-name">export</span> <span class="token assign-left variable">AWS_PROFILE</span><span class="token operator">=</span>vj<br><br><span class="token comment"># You can customize zones as per your convenience</span><br>kops create cluster --zones<span class="token operator">=</span>ap-south-1a <span class="token variable">${NAME}</span><br><br><span class="token comment"># customize to provide your own public key. This will be used to allow ssh based login to master and worker nodes.</span><br>kops create secret --name <span class="token variable">${NAME}</span> sshpublickey admin -i ~/.ssh/dharapvv.pub<br><br><span class="token comment"># You can skip --yes param below to dry-run your changes.</span><br>kops update cluster <span class="token variable">${NAME}</span> --yes<br>kops validate cluster --wait 10m<br><br><span class="token comment"># Later on more customizations to instance groups etc can be done and cluster can be updated again</span><br>kops get ig<br>kops edit ig nodes<br>kops update cluster <span class="token variable">${NAME}</span> --yes<br><br><span class="token comment"># If you want to delete the cluster, use below command</span><br>kops delete cluster --name <span class="token variable">${NAME}</span> --yes</code></pre>
+
+        </div>
+        <div class="col-lg-3 col-md-2 mx-auto">
+          <div>Categories</div>
+          <ul>
+          
+            <li>kubernetes</li>
+          
+            <li>distribution</li>
+          
+            <li>production-grade</li>
+          
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+  <footer><div class="container"><div class="row"><div class="col-12">
+    &copy; 2020-2021. All right reserved. Vijay Dharap.
+  </div></div></div></footer>
+</body>
+
+</html>
