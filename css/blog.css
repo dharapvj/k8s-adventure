@@ -131,3 +131,17 @@ img.special {
 .hvr-overline-from-left:hover:before, .hvr-overline-from-left:focus:before, .hvr-overline-from-left:active:before {
   right: 0;
 }
+
+pre[class*="language-"] {
+  scrollbar-color: rgb(136, 54, 218) rgb(95, 116, 95);
+  scrollbar-width: thin;
+}
+pre[class*="language-"]::-webkit-scrollbar {
+  background-color:rgb(95, 116, 95); /* or add it to the track */
+  width: 7px; height:7px;
+}
+
+/* Add a thumb */
+pre[class*="language-"]::-webkit-scrollbar-thumb {
+    background: rgb(136, 54, 218)
+}
