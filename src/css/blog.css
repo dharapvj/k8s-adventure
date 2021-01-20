@@ -145,3 +145,7 @@ pre[class*="language-"]::-webkit-scrollbar {
 pre[class*="language-"]::-webkit-scrollbar-thumb {
     background: rgb(136, 54, 218)
 }
+
+a{ 
+  color: #c700ff;
+}

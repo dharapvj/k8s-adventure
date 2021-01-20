@@ -32,7 +32,9 @@ export KOPS_STATE_STORE=s3://kops-sample-state-store
 export AWS_PROFILE=vj
 
 # You can customize zones as per your convenience
-kops create cluster --zones=ap-south-1a ${NAME}
+kops create cluster --zones=ap-south-1a --node-count 1 \
+  --node-size t3a.small \
+  --master-size t3a.small  ${NAME}
 
 # customize to provide your own public key. This will be used to allow ssh based login to master and worker nodes.
 kops create secret --name ${NAME} sshpublickey admin -i ~/.ssh/dharapvv.pub
