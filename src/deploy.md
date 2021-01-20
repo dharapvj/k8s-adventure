@@ -48,5 +48,5 @@ kubectl apply -f podinfo.yaml
 For HPA installation and testing please go to [HPA](../hpa) page.
 Cluster Autoscaler FIXME
 
-* Storage testing
+* __Storage__ testing
 Longhorn FIXME
