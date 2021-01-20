@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link href="/css/prism-vsc-dark-plus.css" rel="stylesheet" type="text/css">
+    <link href="/css/blog.css" rel="stylesheet" type="text/css">
+  <title>My Kubernetes Adventures - Horizontal Pod Autoscaler</title>
+</head>
+
+<body>
+  <header>
+  <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
+    <div class="container">
+      <a class="navbar-brand" href="/k8s-adventure/">My Kubernetes Adventures</a>
+      <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        Menu
+        <i class="fas fa-bars"></i>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="/">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/about/">About</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/contact/">Contact</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  </header>
+  <!-- <section class="masthead">
+    <div class="container">
+      <h1 class="title"> Horizontal Pod Autoscaler </h1>
+      <div class="author"> by Vijay Dharap </div>
+      <div class="ts"> <span> January 20, 2021 </span> / <span>hpa,autoscaling,metrics</span></div>  
+    </div>
+  </section> -->
+  <section class="main">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-9 col-md-10 mx-auto">
+          <h1>Horizontal Pod Autoscaler</h1>
+<p><a href="FIXME">Horizontal Pod Autoscaler</a> (HPA) is a technology by which kubernetes cluster can scale the number of replicas for a given deployment automatically.</p>
+<p>It does this by using metric gathered by metrics server. Some of the managed kubernetes distributions provide specific instructiosn to enable metrics server first. Please use those before enabling and testing HPA</p>
+<h2>KOPS Specific instructions</h2>
+<p>Make sure you are using right release tag for the instructions. From v1.19 the process to enable metrics server has become a LOT easier.
+<a href="https://github.com/kubernetes/kops/tree/release-1.18/addons/metrics-server">Install metrics-server on KOPS v1.18</a></p>
+<h2>EKS specific instructions</h2>
+<p>FIXME</p>
+<h2>Verify that Metrics server is running.</h2>
+<p>First of all - it takes about 5 minutes for metrics server to start reporting metrics after installation.</p>
+<pre class="language-shell"><code class="language-shell">kubectl <span class="token function">top</span> node<br>kubectl <span class="token function">top</span> pod</code></pre>
+<h2>Enable HPA for the given deployment</h2>
+<pre class="language-shell"><code class="language-shell"><span class="token comment"># Let us deploy a sample application with considerable amount of CPU usage.</span><br><span class="token comment"># source code for this app can be seen at https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale-walkthrough/</span><br>kubectl apply -f https://k8s.io/examples/application/php-apache.yaml<br><span class="token comment"># Enable Autoscaling with CPU threshold at 50m</span><br>kubectl autoscale deployment php-apache --cpu-percent<span class="token operator">=</span><span class="token number">50</span> --min<span class="token operator">=</span><span class="token number">1</span> --max<span class="token operator">=</span><span class="token number">10</span><br><span class="token comment"># validate HPA is setup properly. If you get "Unknown" in Target column, your metrics server is not working properly.</span><br>kubectl get hpa</code></pre>
+<h2>Test HPA</h2>
+<p>Run following in separate shell as this command blocks the terminal, until you exit</p>
+<pre class="language-shell"><code class="language-shell">kubectl run -i --tty load-generator --rm --image<span class="token operator">=</span>busybox --restart<span class="token operator">=</span>Never -- /bin/sh -c <span class="token string">"while sleep 0.01; do wget -q -O- http://php-apache; done"</span></code></pre>
+<p>Now if you again check your HPA, you should see additional replicas getting created in a minute or so.</p>
+<pre class="language-shell"><code class="language-shell">kubectl get hpa<br><br><span class="token comment"># sample output</span><br><span class="token comment">## The Target and Replicas</span><br>$ kubectl get hpa<br>NAME         REFERENCE               TARGETS         MINPODS   MAXPODS   REPLICAS   AGE<br>php-apache   Deployment/php-apache   <span class="token operator">&lt;</span>unknown<span class="token operator">></span>/50%   <span class="token number">1</span>         <span class="token number">10</span>        <span class="token number">1</span>          60s<br>$ kubectl get hpa<br>NAME         REFERENCE               TARGETS    MINPODS   MAXPODS   REPLICAS   AGE<br>php-apache   Deployment/php-apache   <span class="token number">250</span>%/50%   <span class="token number">1</span>         <span class="token number">10</span>        <span class="token number">1</span>          2m30s<br>$ kubectl get hpa<br>NAME         REFERENCE               TARGETS    MINPODS   MAXPODS   REPLICAS   AGE<br>php-apache   Deployment/php-apache   <span class="token number">250</span>%/50%   <span class="token number">1</span>         <span class="token number">10</span>        <span class="token number">4</span>          2m37s<br><span class="token comment"># now after stopping the load generator (Ctrl + C in other shell window) and waiting for about 5 minutes</span><br>$ kubectl get hpa<br>NAME         REFERENCE               TARGETS    MINPODS   MAXPODS   REPLICAS   AGE<br>php-apache   Deployment/php-apache   <span class="token number">0</span>%/50%    <span class="token number">1</span>         <span class="token number">10</span>        <span class="token number">7</span>          8m28s<br>$ kubectl get hpa<br>NAME         REFERENCE               TARGETS   MINPODS   MAXPODS   REPLICAS   AGE<br>php-apache   Deployment/php-apache   <span class="token number">0</span>%/50%    <span class="token number">1</span>         <span class="token number">10</span>        <span class="token number">1</span>          10m</code></pre>
+<h2>Autoscaling on mutliple and custom metrics</h2>
+<p>Please follow <a href="https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale-walkthrough/#autoscaling-on-multiple-metrics-and-custom-metrics">this document</a> for more advanced usage of HPA</p>
+
+        </div>
+        <div class="col-lg-3 col-md-2 mx-auto">
+          <div>Categories</div>
+          <ul>
+          
+            <li>hpa</li>
+          
+            <li>autoscaling</li>
+          
+            <li>metrics</li>
+          
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+  <footer><div class="container"><div class="row"><div class="col-12">
+    &copy; 2020-2021. All right reserved. Vijay Dharap.
+  </div></div></div></footer>
+</body>
+
+</html>

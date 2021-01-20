@@ -74,27 +74,15 @@
 <li>Kubespray</li>
 </ul>
 <h2>Typical things to validate various Kubernetes features</h2>
-<p>Commands below are written for <code>Helm v3</code>. Same commands cannot be used for <code>Helm v2</code>. Please adapt the commands as needed.</p>
 <ul>
-<li><strong>Ingress Controller</strong> - Ingress controller should be installed first so that other components can be accessed via ingress.</li>
-</ul>
-<pre class="language-shell"><code class="language-shell">kubectl create ns ingress-nginx<br>helm repo <span class="token function">add</span> ingress-nginx https://kubernetes.github.io/ingress-nginx<br>helm repo update<br>helm upgrade --install ingress-nginx ingress-nginx/ingress-nginx -f ingress-nginx</code></pre>
-<ul>
-<li><strong>Kubernetes Dashboard</strong> - Kubernete Dashboard.</li>
-</ul>
-<pre class="language-shell"><code class="language-shell"><span class="token builtin class-name">cd</span> deploy<br>kubectl create ns dashboard<br>helm repo <span class="token function">add</span> kubernetes-dashboard https://kubernetes.github.io/dashboard/<br>helm repo update<br>helm upgrade --install k8s-dashboard kubernetes-dashboard/kubernetes-dashboard -f k8s-dashboard.yaml -n dashboard</code></pre>
-<ul>
+<li>Ingress Controller</li>
+<li>Kubernetes Dashboard</li>
 <li>Monitoring</li>
-</ul>
-<pre class="language-shell"><code class="language-shell"><span class="token builtin class-name">cd</span> deploy<br>kubectl create ns monitoring<br><br><span class="token comment"># install prometheus</span><br>helm repo <span class="token function">add</span> prometheus-community https://prometheus-community.github.io/helm-charts<br>helm repo update<br>helm upgrade --install prometheus prometheus-community/prometheus --version <span class="token number">13.0</span>.1 -f prometheus.yaml -n monitoring<br><br><span class="token comment"># install grafana</span><br>helm repo <span class="token function">add</span> grafana https://grafana.github.io/helm-charts<br>helm repo update<br>helm upgrade --install grafana grafana/grafana --version <span class="token number">6.1</span>.16 -f grafana.yaml -n monitoring</code></pre>
-<ul>
 <li>podinfo deployment</li>
-</ul>
-<pre class="language-shell"><code class="language-shell"><span class="token builtin class-name">cd</span> deploy<br>kubectl apply -k github.com/stefanprodan/podinfo//kustomize<br>kubectl apply -f podinfo.yaml</code></pre>
-<ul>
 <li>Autoscaling testing (both HPA and cluster)</li>
 <li>Storage testing</li>
 </ul>
+<p>Please access <a href="./deploy">deploy</a> page to access exact command to deploy these items in your cluster.</p>
 <h2>Installation of Multi-cluster Managers</h2>
 <ul>
 <li>Kubermatic Kubernetes Platform (kkp)</li>

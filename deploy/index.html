@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link href="/css/prism-vsc-dark-plus.css" rel="stylesheet" type="text/css">
+    <link href="/css/blog.css" rel="stylesheet" type="text/css">
+  <title>My Kubernetes Adventures - Typical Deployments for cluster validation</title>
+</head>
+
+<body>
+  <header>
+  <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
+    <div class="container">
+      <a class="navbar-brand" href="/k8s-adventure/">My Kubernetes Adventures</a>
+      <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        Menu
+        <i class="fas fa-bars"></i>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="/">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/about/">About</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/contact/">Contact</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  </header>
+  <!-- <section class="masthead">
+    <div class="container">
+      <h1 class="title"> Typical Deployments For Cluster Validation </h1>
+      <div class="author"> by Vijay Dharap </div>
+      <div class="ts"> <span> January 20, 2021 </span> / <span>helm,ingress,dashboard,monitoring,smoke-testing,validation</span></div>  
+    </div>
+  </section> -->
+  <section class="main">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-9 col-md-10 mx-auto">
+          <h1>Typical Deployments for cluster validation</h1>
+<p>Commands below are written for <code>Helm v3</code>. Same commands cannot be used for <code>Helm v2</code>. Please adapt the commands as needed.</p>
+<ul>
+<li><strong>Ingress Controller</strong> - Ingress controller should be installed first so that other components can be accessed via ingress.</li>
+</ul>
+<pre class="language-shell"><code class="language-shell">kubectl create ns ingress-nginx<br>helm repo <span class="token function">add</span> ingress-nginx https://kubernetes.github.io/ingress-nginx<br>helm repo update<br>helm upgrade --install ingress-nginx ingress-nginx/ingress-nginx -n ingress-nginx</code></pre>
+<ul>
+<li><strong>Kubernetes Dashboard</strong> - Kubernete Dashboard.</li>
+</ul>
+<pre class="language-shell"><code class="language-shell"><span class="token builtin class-name">cd</span> deploy<br>kubectl create ns dashboard<br>helm repo <span class="token function">add</span> kubernetes-dashboard https://kubernetes.github.io/dashboard/<br>helm repo update<br>helm upgrade --install k8s-dashboard kubernetes-dashboard/kubernetes-dashboard -f k8s-dashboard.yaml -n dashboard</code></pre>
+<ul>
+<li><strong>Monitoring</strong></li>
+</ul>
+<pre class="language-shell"><code class="language-shell"><span class="token builtin class-name">cd</span> deploy<br>kubectl create ns monitoring<br><br><span class="token comment"># install prometheus</span><br>helm repo <span class="token function">add</span> prometheus-community https://prometheus-community.github.io/helm-charts<br>helm repo update<br>helm upgrade --install prometheus prometheus-community/prometheus --version <span class="token number">13.0</span>.1 -f prometheus.yaml -n monitoring<br><br><span class="token comment"># install grafana</span><br>helm repo <span class="token function">add</span> grafana https://grafana.github.io/helm-charts<br>helm repo update<br>helm upgrade --install grafana grafana/grafana --version <span class="token number">6.1</span>.16 -f grafana.yaml -n monitoring</code></pre>
+<ul>
+<li><strong>podinfo</strong> deployment</li>
+</ul>
+<pre class="language-shell"><code class="language-shell"><span class="token builtin class-name">cd</span> deploy<br>kubectl apply -k github.com/stefanprodan/podinfo//kustomize<br>kubectl apply -f podinfo.yaml</code></pre>
+<ul>
+<li>
+<p><strong>Autoscaling</strong> testing (both HPA and cluster)
+For HPA installation and testing please go to <a href="../hpa">HPA</a> page.
+Cluster Autoscaler FIXME</p>
+</li>
+<li>
+<p>Storage testing
+Longhorn FIXME</p>
+</li>
+</ul>
+
+        </div>
+        <div class="col-lg-3 col-md-2 mx-auto">
+          <div>Categories</div>
+          <ul>
+          
+            <li>helm</li>
+          
+            <li>ingress</li>
+          
+            <li>dashboard</li>
+          
+            <li>monitoring</li>
+          
+            <li>smoke-testing</li>
+          
+            <li>validation</li>
+          
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+  <footer><div class="container"><div class="row"><div class="col-12">
+    &copy; 2020-2021. All right reserved. Vijay Dharap.
+  </div></div></div></footer>
+</body>
+
+</html>
