@@ -33,6 +33,7 @@ module.exports = function(eleventyConfig) {
   return {
     dir: {
       input: "src"
-    }
+    },
+    pathPrefix: "/k8s-adventure/"
   }
 };
