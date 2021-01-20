@@ -3,7 +3,7 @@ layout: layout2.njk
 title: Home
 author: Vijay Dharap
 timestamp: July 23, 2020 
-tags: [more, tags]
+tags: [kubernetes, k8s, explore, adventures, index]
 ---
 
 # {{ title }}
@@ -11,7 +11,7 @@ tags: [more, tags]
 ## Setting up your developer environment terminal
 * [bash profile settings](./bash-settings)
 * [byobu](./byobu)
-* Kubernetes tools - kubectl, helm
+* [Kubernetes tools](./kube-tools) - kubectl, helm
 * kubectx, kubens, kube-ps1, k, complete alias
 * Free Root DNS
 * Things to setup in AWS Account e.g. Route53 hosted zone
