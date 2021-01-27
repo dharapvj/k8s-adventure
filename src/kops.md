@@ -34,6 +34,8 @@ export AWS_PROFILE=vj
 # You can customize zones as per your convenience
 kops create cluster --zones=ap-south-1a --node-count 1 \
   --node-size t3a.small \
+  --master-volume-size 30 \
+  --node-volume-size 30 \
   --master-size t3a.small  ${NAME}
 
 # customize to provide your own public key. This will be used to allow ssh based login to master and worker nodes.

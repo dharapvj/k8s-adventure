@@ -13,13 +13,13 @@ tags: [kubernetes, k8s, explore, adventures, index]
 * [byobu](./byobu)
 * [Kubernetes tools](./kube-tools) - kubectl, helm
 * kubectx, kubens, kube-ps1, k, complete alias
-* Free Root DNS
+* Free domain name (TLD)
 * Things to setup in AWS Account e.g. Route53 hosted zone
 * Things to setup in Azure Account
 * your common ssh-key for nodes
 
 ## Installation of Simpler trial Kubernetes Distributions
-* k3s
+* k3s (./k3s)
 * Minikube
 * Kind
 
@@ -52,10 +52,11 @@ Please access [deploy](./deploy) page to access exact command to deploy these it
 
 ### Security
 * Using Hashicorp Vault for secrets. (Usage via In-cluster installation with Consul)
+* Authentication via OIDC using Keycloak / Dex FIXME
 
 ### Auto-scaling
-* Pod Autoscaling via Horizontal Pod Autoscaler ( KOPS, EKS)
-* Node autoscaling via Cluster Autoscaler (EKS)
+* Pod Autoscaling via [Horizontal Pod Autoscaler](../hpa) ( KOPS, EKS)
+* Node autoscaling via Cluster Autoscaler (EKS) FIXME
 
 ### WIP ( External-DNS setup)
 
