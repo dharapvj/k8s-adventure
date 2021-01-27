@@ -8,7 +8,7 @@ tags: [hpa, autoscaling, metrics]
 
 # {{ title }}
 
-[Horizontal Pod Autoscaler](FIXME) (HPA) is a technology by which kubernetes cluster can scale the number of replicas for a given deployment automatically.
+[Horizontal Pod Autoscaler](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) (HPA) is a technology by which kubernetes cluster can scale the number of replicas for a given deployment automatically.
 
 It does this by using metric gathered by metrics server. Some of the managed kubernetes distributions provide specific instructiosn to enable metrics server first. Please use those before enabling and testing HPA
 
@@ -17,7 +17,7 @@ Make sure you are using right release tag for the instructions. From v1.19 the p
 [Install metrics-server on KOPS v1.18](https://github.com/kubernetes/kops/tree/release-1.18/addons/metrics-server)
 
 ## EKS specific instructions
-FIXME
+Follow instruction [here](https://docs.aws.amazon.com/eks/latest/userguide/horizontal-pod-autoscaler.html) to add metrics-server and then add autoscaling test aplication. Most of the instructions below are valid for EKS as well after metrics-server is installed from the link.
 
 ## Verify that Metrics server is running.
 First of all - it takes about 5 minutes for metrics server to start reporting metrics after installation.
@@ -43,28 +43,27 @@ Run following in separate shell as this command blocks the terminal, until you e
 kubectl run -i --tty load-generator --rm --image=busybox --restart=Never -- /bin/sh -c "while sleep 0.01; do wget -q -O- http://php-apache; done"
 ```
 Now if you again check your HPA, you should see additional replicas getting created in a minute or so.
-``` shell
-kubectl get hpa
 
+You can notice the load increase reported in targets column and then subsequent scaling up of replicas. After the load generator was stopped, you can see that load goes down. Replica count also comes down after about 5 minutes of cooling period.
+
+``` shell
 # sample output
-## The Target and Replicas
-$ kubectl get hpa
-NAME         REFERENCE               TARGETS         MINPODS   MAXPODS   REPLICAS   AGE
-php-apache   Deployment/php-apache   <unknown>/50%   1         10        1          60s
-$ kubectl get hpa
-NAME         REFERENCE               TARGETS    MINPODS   MAXPODS   REPLICAS   AGE
-php-apache   Deployment/php-apache   250%/50%   1         10        1          2m30s
-$ kubectl get hpa
-NAME         REFERENCE               TARGETS    MINPODS   MAXPODS   REPLICAS   AGE
-php-apache   Deployment/php-apache   250%/50%   1         10        4          2m37s
-# now after stopping the load generator (Ctrl + C in other shell window) and waiting for about 5 minutes
-$ kubectl get hpa
-NAME         REFERENCE               TARGETS    MINPODS   MAXPODS   REPLICAS   AGE
-php-apache   Deployment/php-apache   0%/50%    1         10        7          8m28s
-$ kubectl get hpa
+$ kubectl get hpa -w
 NAME         REFERENCE               TARGETS   MINPODS   MAXPODS   REPLICAS   AGE
-php-apache   Deployment/php-apache   0%/50%    1         10        1          10m
+php-apache   Deployment/php-apache   0%/50%    1         10        1          2m52s
+php-apache   Deployment/php-apache   250%/50%   1         10        1          3m48s
+php-apache   Deployment/php-apache   250%/50%   1         10        4          4m4s
+php-apache   Deployment/php-apache   250%/50%   1         10        5          4m18s
+
+### stopping the load now
+php-apache   Deployment/php-apache   73%/50%    1         10        5          4m48s
+php-apache   Deployment/php-apache   0%/50%     1         10        5          5m49s
+php-apache   Deployment/php-apache   0%/50%     1         10        5          10m
+php-apache   Deployment/php-apache   0%/50%     1         10        1          10m
 ```
 
 ## Autoscaling on mutliple and custom metrics
 Please follow [this document](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale-walkthrough/#autoscaling-on-multiple-metrics-and-custom-metrics) for more advanced usage of HPA
+
+## Delete test application
+kubectl delete deployment.apps/php-apache service/php-apache horizontalpodautoscaler.autoscaling/php-apache
