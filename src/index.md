@@ -19,26 +19,27 @@ tags: [kubernetes, k8s, explore, adventures, index]
 * your common ssh-key for nodes
 
 ## Installation of Simpler trial Kubernetes Distributions
-* k3s (./k3s)
+* [k3s](./k3s)
 * Minikube
 * Kind
 
 ## Installation of Production Grade Kubernetes Distributions
 * [KOPS](./kops)
-* EKS
+* [EKS](./eks)
 * AKS
 * Kubermatic KubeOne
 * Kubespray
 
 ## Typical things to validate various Kubernetes features
+
+Please access [deploy](./deploy) page to access exact command to deploy these items in your cluster. 
+
 * Ingress Controller
 * Kubernetes Dashboard
 * Monitoring
 * podinfo deployment
 * Autoscaling testing (both HPA and cluster)
 * Storage testing
-
-Please access [deploy](./deploy) page to access exact command to deploy these items in your cluster. 
 
 ## Installation of Multi-cluster Managers
 * Kubermatic Kubernetes Platform (kkp)
