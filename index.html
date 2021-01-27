@@ -53,14 +53,14 @@
 <li><a href="./byobu">byobu</a></li>
 <li><a href="./kube-tools">Kubernetes tools</a> - kubectl, helm</li>
 <li>kubectx, kubens, kube-ps1, k, complete alias</li>
-<li>Free Root DNS</li>
+<li>Free domain name (TLD)</li>
 <li>Things to setup in AWS Account e.g. Route53 hosted zone</li>
 <li>Things to setup in Azure Account</li>
 <li>your common ssh-key for nodes</li>
 </ul>
 <h2>Installation of Simpler trial Kubernetes Distributions</h2>
 <ul>
-<li>k3s</li>
+<li>k3s (./k3s)</li>
 <li>Minikube</li>
 <li>Kind</li>
 </ul>
@@ -96,11 +96,12 @@
 <h3>Security</h3>
 <ul>
 <li>Using Hashicorp Vault for secrets. (Usage via In-cluster installation with Consul)</li>
+<li>Authentication via OIDC using Keycloak / Dex FIXME</li>
 </ul>
 <h3>Auto-scaling</h3>
 <ul>
-<li>Pod Autoscaling via Horizontal Pod Autoscaler ( KOPS, EKS)</li>
-<li>Node autoscaling via Cluster Autoscaler (EKS)</li>
+<li>Pod Autoscaling via <a href="../hpa">Horizontal Pod Autoscaler</a> ( KOPS, EKS)</li>
+<li>Node autoscaling via Cluster Autoscaler (EKS) FIXME</li>
 </ul>
 <h3>WIP ( External-DNS setup)</h3>
 <h3>WIP Access cloud resouces via kube2iam / aad-pod-identity / gke workload identity etc</h3>
