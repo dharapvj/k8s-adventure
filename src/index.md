@@ -56,7 +56,7 @@ Please access [deploy](./deploy) page to access exact command to deploy these it
 * Authentication via OIDC using Keycloak / Dex FIXME
 
 ### Auto-scaling
-* Pod Autoscaling via [Horizontal Pod Autoscaler](../hpa) ( KOPS, EKS)
+* Pod Autoscaling via [Horizontal Pod Autoscaler](./hpa) ( KOPS, EKS)
 * Node autoscaling via Cluster Autoscaler (EKS) FIXME
 
 ### WIP ( External-DNS setup)
