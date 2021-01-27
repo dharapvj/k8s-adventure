@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="/k8s-adventure/css/bootstrap.min.css">
+    <link href="/k8s-adventure/css/prism-vsc-dark-plus.css" rel="stylesheet" type="text/css">
+    <link href="/k8s-adventure/css/blog.css" rel="stylesheet" type="text/css">
+  <title>My Kubernetes Adventures - AWS Elastic Kubernetes Service</title>
+</head>
+
+<body>
+  <header>
+  <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
+    <div class="container">
+      <a class="navbar-brand" href="/k8s-adventure/">My Kubernetes Adventures</a>
+      <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        Menu
+        <i class="fas fa-bars"></i>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="/">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/about/">About</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/contact/">Contact</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  </header>
+  <!-- <section class="masthead">
+    <div class="container">
+      <h1 class="title"> Aws Elastic Kubernetes Service </h1>
+      <div class="author"> by Vijay Dharap </div>
+      <div class="ts"> <span> January 20, 2021 </span> / <span>eks,distribution</span></div>  
+    </div>
+  </section> -->
+  <section class="main">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-9 col-md-10 mx-auto">
+          <h1>AWS Elastic Kubernetes Service</h1>
+<h2>Create EKS Cluster</h2>
+<p>Below commands will help you install eksctl binary on ubuntu and use it to create EKS cluster quickly.</p>
+<pre class="language-shell"><code class="language-shell"><span class="token comment"># install eksctl</span><br><span class="token function">curl</span> --silent --location <span class="token string">"https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_<span class="token variable"><span class="token variable">$(</span><span class="token function">uname</span> -s<span class="token variable">)</span></span>_amd64.tar.gz"</span> <span class="token operator">|</span> <span class="token function">tar</span> xz -C /tmp<br><span class="token function">sudo</span> <span class="token function">mv</span> /tmp/eksctl /usr/local/bin<br>eksctl version<br><br><span class="token comment"># create cluster</span><br>eksctl create cluster --name vj-eks-1 --version <span class="token number">1.18</span> --region ap-south-1 --nodegroup-name eks-basic-nodes --nodes <span class="token number">1</span> --nodes-min <span class="token number">1</span> --nodes-max <span class="token number">1</span> --with-oidc --ssh-access --ssh-public-key dharapvv --managed --node-volume-size<span class="token operator">=</span><span class="token number">30</span><br><br><span class="token comment"># delete the cluster when work is done</span><br>eksctl delete cluster --name vj-eks-1 --region ap-south-1</code></pre>
+<h2>Cluster Autoscaler</h2>
+<p><a href="https://docs.aws.amazon.com/eks/latest/userguide/cluster-autoscaler.html">Follow instructions here to add and test Cluster Autoscaling in EKS</a></p>
+<h2>Using AWS EIP CNI and pod networking security via AWS Sec Groups</h2>
+<p>FIXME - It did not work as per my expectations in my trials</p>
+<h2>Usage of AWS IAM Authentication (EKS Authentication)</h2>
+<h2>Delete EKS Cluster</h2>
+<pre class="language-shell"><code class="language-shell">eksctl delete cluster --name vj-eks-1 --region ap-south-1</code></pre>
+
+        </div>
+        <div class="col-lg-3 col-md-2 mx-auto">
+          <div>Categories</div>
+          <ul>
+          
+            <li>eks</li>
+          
+            <li>distribution</li>
+          
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+  <footer><div class="container"><div class="row"><div class="col-12">
+    &copy; 2020-2021. All right reserved. Vijay Dharap.
+  </div></div></div></footer>
+</body>
+
+</html>
