@@ -4,6 +4,7 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="shortcut icon" href="/k8s-adventure/css/adventure.ico" type="image/x-icon">
     <link rel="stylesheet" href="/k8s-adventure/css/bootstrap.min.css">
     <link href="/k8s-adventure/css/prism-vsc-dark-plus.css" rel="stylesheet" type="text/css">
     <link href="/k8s-adventure/css/blog.css" rel="stylesheet" type="text/css">
@@ -51,7 +52,7 @@
 <ul>
 <li><strong>Ingress Controller</strong> - Ingress controller should be installed first so that other components can be accessed via ingress.</li>
 </ul>
-<pre class="language-shell"><code class="language-shell">kubectl create ns ingress-nginx<br>helm repo <span class="token function">add</span> ingress-nginx https://kubernetes.github.io/ingress-nginx<br>helm repo update<br>helm upgrade --install ingress-nginx ingress-nginx/ingress-nginx -n ingress-nginx</code></pre>
+<pre class="language-shell"><code class="language-shell">kubectl create ns ingress-nginx<br>helm repo <span class="token function">add</span> ingress-nginx https://kubernetes.github.io/ingress-nginx<br>helm repo update<br><span class="token builtin class-name">cd</span> deploy<br>helm upgrade --install ingress-nginx ingress-nginx/ingress-nginx -n ingress-nginx -f ingress.yaml</code></pre>
 <ul>
 <li><strong>Kubernetes Dashboard</strong> - Kubernete Dashboard.</li>
 </ul>

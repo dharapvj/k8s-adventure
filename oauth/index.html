@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="shortcut icon" href="/k8s-adventure/css/adventure.ico" type="image/x-icon">
+    <link rel="stylesheet" href="/k8s-adventure/css/bootstrap.min.css">
+    <link href="/k8s-adventure/css/prism-vsc-dark-plus.css" rel="stylesheet" type="text/css">
+    <link href="/k8s-adventure/css/blog.css" rel="stylesheet" type="text/css">
+  <title>My Kubernetes Adventures - Dashboard authentication using Keycloak</title>
+</head>
+
+<body>
+  <header>
+  <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
+    <div class="container">
+      <a class="navbar-brand" href="/k8s-adventure/">My Kubernetes Adventures</a>
+      <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        Menu
+        <i class="fas fa-bars"></i>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="/">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/about/">About</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/contact/">Contact</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  </header>
+  <!-- <section class="masthead">
+    <div class="container">
+      <h1 class="title"> Dashboard Authentication Using Keycloak </h1>
+      <div class="author"> by Vijay Dharap </div>
+      <div class="ts"> <span> January 20, 2021 </span> / <span>Keycloak,authentication,dashboard,oidc,authorization</span></div>  
+    </div>
+  </section> -->
+  <section class="main">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-9 col-md-10 mx-auto">
+          <h1>Dashboard authentication using Keycloak</h1>
+<h2>Steps to install OIDC authenticator and setup authentication</h2>
+<ol>
+<li>install keycloak</li>
+</ol>
+<pre class="language-shell"><code class="language-shell"><span class="token function">curl</span> -LO https://raw.githubusercontent.com/keycloak/keycloak-quickstarts/latest/kubernetes-examples/keycloak.yaml<br><span class="token comment"># above file has keycloak service as LoadBalancer. Please change the same to ClusterIP</span><br>kubectl apply -f keycloak.yaml</code></pre>
+<ol start="2">
+<li><a href="https://www.keycloak.org/getting-started/getting-started-kube">create</a> realm, client, users and group in keycloak. Optionally, you can also connect to another OIDC server to delegate authentication.</li>
+<li>Assign custom mappers for client scope &quot;email&quot; to add
+a) groups of type &quot;Group membership&quot; for &quot;groups&quot; claim
+a) audience for &quot;aud&quot; claim</li>
+<li><a href="https://github.com/kubernetes/kops/blob/master/docs/cluster_spec.md#oidc-flags-for-open-id-connect-tokens">Enable OIDC authentication in KOPS</a></li>
+</ol>
+<pre class="language-shell"><code class="language-shell">kops edit cluster <span class="token variable">${NAME}</span><br><span class="token comment"># add below </span><br>spec:<br>   kubeAPIServer:<br>     oidcClientID: k8s-dashboard<br>     oidcGroupsClaim: <span class="token function">groups</span><br>     oidcIssuerURL: https://keycloak.kops.dh4r4pvj.ga/auth/realms/k8s-user<br>     oidcUsernameClaim: email<br><br><span class="token comment"># save the changes</span><br>kops update cluster <span class="token variable">${NAME}</span> --yes<br>kops rolling-update cluster --cloudonly --yes</code></pre>
+<ol start="5">
+<li>deploy <a href="https://kubernetes.io/docs/tasks/access-application-cluster/web-ui-dashboard/#deploying-the-dashboard-ui">kubernetes dashboard</a> and keycloak-proxy, clusterroles and clusterrolebinding</li>
+</ol>
+<pre class="language-shell"><code class="language-shell">kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.0.0/aio/deploy/recommended.yaml<br>kubectl apply -f dashboard-proxy.yaml <span class="token comment"># this file is present in same directory in github</span></code></pre>
+<ol start="6">
+<li>Login as adm and regular user (no good way to logout)</li>
+<li>Profit!!</li>
+</ol>
+<h3>References:</h3>
+<ol>
+<li>https://itnext.io/protect-kubernetes-dashboard-with-openid-connect-104b9e75e39c</li>
+<li>https://medium.com/@int128/kubectl-with-openid-connect-43120b451672</li>
+<li>https://devopstales.github.io/sso/k8s-dasboard-auth/</li>
+</ol>
+
+        </div>
+        <div class="col-lg-3 col-md-2 mx-auto">
+          <div>Categories</div>
+          <ul>
+          
+            <li>Keycloak</li>
+          
+            <li>authentication</li>
+          
+            <li>dashboard</li>
+          
+            <li>oidc</li>
+          
+            <li>authorization</li>
+          
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+  <footer><div class="container"><div class="row"><div class="col-12">
+    &copy; 2020-2021. All right reserved. Vijay Dharap.
+  </div></div></div></footer>
+</body>
+
+</html>

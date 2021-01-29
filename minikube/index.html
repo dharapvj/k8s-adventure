@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="/k8s-adventure/css/bootstrap.min.css">
     <link href="/k8s-adventure/css/prism-vsc-dark-plus.css" rel="stylesheet" type="text/css">
     <link href="/k8s-adventure/css/blog.css" rel="stylesheet" type="text/css">
-  <title>My Kubernetes Adventures - Byobu - Terminal Multiplexer</title>
+  <title>My Kubernetes Adventures - Minikube</title>
 </head>
 
 <body>
@@ -38,26 +38,40 @@
   </header>
   <!-- <section class="masthead">
     <div class="container">
-      <h1 class="title"> Byobu - Terminal Multiplexer </h1>
+      <h1 class="title"> Minikube </h1>
       <div class="author"> by Vijay Dharap </div>
-      <div class="ts"> <span> July 23, 2020 </span> / <span>more,tags</span></div>  
+      <div class="ts"> <span> January 20, 2021 </span> / <span>distro,lean,quickstart</span></div>  
     </div>
   </section> -->
   <section class="main">
     <div class="container">
       <div class="row">
         <div class="col-lg-9 col-md-10 mx-auto">
-          <h1>Byobu - Terminal Multiplexer</h1>
-<p>test</p>
+          <h1>Minikube</h1>
+<p><a href="https://minikube.sigs.k8s.io/docs/">Minikube</a> is one of the most basic and simplest way to get acquainted with Kubernetes. It creates single node cluster to experiment in matter of couple of minutes on your local machine.</p>
+<h2>Install and start the cluster</h2>
+<pre class="language-shell"><code class="language-shell"><span class="token comment"># download and install</span><br><span class="token function">curl</span> -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64<br><span class="token function">sudo</span> <span class="token function">install</span> minikube-linux-amd64 /usr/local/bin/minikube<br><br><span class="token comment"># start</span><br>minikube start</code></pre>
+<h2>Addons</h2>
+<pre class="language-shell"><code class="language-shell">minikube addons list<br>minikube addons <span class="token builtin class-name">enable</span> ingress</code></pre>
+<h2>Caveats</h2>
+<ul>
+<li>Basically, Minikube is best suited for testing kubernetes on local OS. If you use remote machine with CLI only, accessing services is pretty hard.</li>
+<li>Using LoadBalancer service needs <code>minikube tunnel</code> command and it only creates a temporary load balancer.</li>
+<li>You will not get external IP even if you use service of type NodePort.</li>
+</ul>
+<h2>Delete the cluster</h2>
+<pre class="language-shell"><code class="language-shell">minikube stop<br><span class="token comment"># If you want delete all the pods and services permanently, then...</span><br>minikube delete</code></pre>
 
         </div>
         <div class="col-lg-3 col-md-2 mx-auto">
           <div>Categories</div>
           <ul>
           
-            <li>more</li>
+            <li>distro</li>
           
-            <li>tags</li>
+            <li>lean</li>
+          
+            <li>quickstart</li>
           
           </ul>
         </div>
