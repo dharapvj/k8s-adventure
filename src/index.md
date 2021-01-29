@@ -20,7 +20,7 @@ tags: [kubernetes, k8s, explore, adventures, index]
 
 ## Installation of Simpler trial Kubernetes Distributions
 * [k3s](./k3s)
-* Minikube
+* [Minikube](./minikube)
 * Kind
 
 ## Installation of Production Grade Kubernetes Distributions

@@ -13,7 +13,8 @@ Commands below are written for `Helm v3`. Same commands cannot be used for `Helm
 kubectl create ns ingress-nginx
 helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
 helm repo update
-helm upgrade --install ingress-nginx ingress-nginx/ingress-nginx -n ingress-nginx
+cd deploy
+helm upgrade --install ingress-nginx ingress-nginx/ingress-nginx -n ingress-nginx -f ingress.yaml
 ```
 * __Kubernetes Dashboard__ - Kubernete Dashboard.
 ``` shell

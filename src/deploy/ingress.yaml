@@ -1,0 +1,21 @@
+controller:
+  config:
+    use-proxy-protocol: "false"
+    enable-underscores-in-headers: "true"
+    server-tokens: "false"
+    use-forwarded-headers: "true"
+    proxy-real-ip-cidr: "172.20.0.0/16"
+  service:
+    enableHttp: false
+    targetPorts:
+      https: http
+    annotations:
+      # replace with the correct value of the generated certificate in the AWS console
+      service.beta.kubernetes.io/aws-load-balancer-ssl-cert: "arn:aws:acm:ap-south-1:064814169464:certificate/ee93a38c-0df0-485c-8692-c9f467b2d0f8"
+      # the backend instances are HTTP
+      service.beta.kubernetes.io/aws-load-balancer-backend-protocol: "http"
+      # Map port 443
+      service.beta.kubernetes.io/aws-load-balancer-ssl-ports: "https"
+      # Increase the ELB idle timeout to avoid issues with WebSockets or Server-Sent Events.
+      service.beta.kubernetes.io/aws-load-balancer-connection-idle-timeout: "3600"
+

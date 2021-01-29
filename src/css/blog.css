@@ -42,7 +42,7 @@
 body {
   color: #212529;
   font-family: 'Merriweather', 'Times New Roman', Times, serif;
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   padding-top: 56px;
 }
 
@@ -52,7 +52,7 @@ h1,h2,h3,h4,h5,h6 {
 }
 
 h2 {
-  margin-top: 1.5rem;
+  margin-top: 1.2rem;
 }
 h3 {
   margin-top: 0.7rem;
