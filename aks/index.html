@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="shortcut icon" href="/k8s-adventure/css/adventure.ico" type="image/x-icon">
+    <link rel="stylesheet" href="/k8s-adventure/css/bootstrap.min.css">
+    <link href="/k8s-adventure/css/prism-vsc-dark-plus.css" rel="stylesheet" type="text/css">
+    <link href="/k8s-adventure/css/blog.css" rel="stylesheet" type="text/css">
+  <title>My Kubernetes Adventures - AKS - Azure Kubernetes Service</title>
+</head>
+
+<body>
+  <header>
+  <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
+    <div class="container">
+      <a class="navbar-brand" href="/k8s-adventure/">My Kubernetes Adventures</a>
+      <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        Menu
+        <i class="fas fa-bars"></i>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="/">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/about/">About</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/contact/">Contact</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  </header>
+  <!-- <section class="masthead">
+    <div class="container">
+      <h1 class="title"> Aks - Azure Kubernetes Service </h1>
+      <div class="author"> by Vijay Dharap </div>
+      <div class="ts"> <span> January 20, 2021 </span> / <span>aks,distribution</span></div>  
+    </div>
+  </section> -->
+  <section class="main">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-9 col-md-10 mx-auto">
+          <h1>AKS - Azure Kubernetes Service</h1>
+<h2>Create AKS Cluster</h2>
+<p>Below commands will help you install eksctl binary on ubuntu and use it to create EKS cluster quickly.</p>
+<pre class="language-shell"><code class="language-shell"><span class="token comment"># install azure CLI on ubuntu using one command</span><br><span class="token function">curl</span> -sL https://aka.ms/InstallAzureCLIDeb <span class="token operator">|</span> <span class="token function">sudo</span> <span class="token function">bash</span><br><span class="token comment"># do aAzure Login and register the services, if not registered already.</span><br>az login<br>az provider register --namespace Microsoft.OperationsManagement<br>az provider register --namespace Microsoft.OperationalInsights<br><br><span class="token comment"># find out supported k8s versions in your region. You need jq installed for this command to work</span><br>az aks get-versions --location centralindia <span class="token operator">|</span> jq .orchestrators<span class="token punctuation">[</span><span class="token punctuation">]</span>.orchestratorVersion<br><br><span class="token comment"># install a minimal and cheap AKS cluster created</span><br>az aks create --resource-group k8s-adventure --name vj-aks-1 --node-count <span class="token number">1</span> --enable-addons monitoring --enable-cluster-autoscaler  --kubernetes-version <span class="token number">1.19</span>.6 --ssh-key-value ~/.ssh/dharapvv.pub --location centralindia --max-count <span class="token number">3</span> --min-count <span class="token number">1</span> --node-vm-size Standard_B2s<br><br><span class="token comment"># Get kubeconfig for this above cluster</span><br>az aks get-credentials --resource-group k8s-adventure --name vj-aks-1<br><br><span class="token comment"># delete the cluster when work is done</span><br>az aks delete --resource-group k8s-adventure --name vj-aks-1</code></pre>
+<h2>Using AAD-pod-Identity-Provider to access Azure Resources</h2>
+<p>Using AAD-pod-identity provider, the pods can securely access Azure resources based on the Roles assigned to their identities.</p>
+<p>Below steps are based on the <a href="https://azure.github.io/aad-pod-identity/docs/demo/standard_walkthrough/">guide</a> from aad-pod-identity documentation.</p>
+<p>For aad-pod-identity based access to work properly, we need setup below identity assigements</p>
+<pre class="language-shell"><code class="language-shell">az role assignment create --role <span class="token string">"Managed Identity Operator"</span> --assignee <span class="token operator">&lt;</span>id_of_agentpool_managed_identity<span class="token operator">></span> --scope /subscriptions/YOUR_SUBSCRIPTION_ID/resourcegroups/MC_k8s-adventure_vj-aks-1_centralindia<br>az role assignment create --role <span class="token string">"Virtual Machine Contributor"</span> --assignee <span class="token operator">&lt;</span>id_of_agentpool_managed_identity<span class="token operator">></span> --scope /subscriptions/YOUR_SUBSCRIPTION_ID/resourcegroups/MC_k8s-adventure_vj-aks-1_centralindia</code></pre>
+<p>Now, lets do actual installation of the add-pod-identity helm chart and sample apps.</p>
+<pre class="language-shell"><code class="language-shell"><span class="token comment"># Setup few variables</span><br><span class="token builtin class-name">export</span> <span class="token assign-left variable">SUBSCRIPTION_ID</span><span class="token operator">=</span><span class="token string">"YOUR_AZURE_SUBSCRIPTION_ID"</span><br><span class="token builtin class-name">export</span> <span class="token assign-left variable">RESOURCE_GROUP</span><span class="token operator">=</span><span class="token string">"k8s-adventure"</span><br><span class="token builtin class-name">export</span> <span class="token assign-left variable">CLUSTER_NAME</span><span class="token operator">=</span><span class="token string">"vj-aks-1"</span><br><span class="token builtin class-name">export</span> <span class="token assign-left variable">IDENTITY_RESOURCE_GROUP</span><span class="token operator">=</span><span class="token string">"<span class="token variable"><span class="token variable">$(</span>az aks show -g $<span class="token punctuation">{</span>RESOURCE_GROUP<span class="token punctuation">}</span> -n $<span class="token punctuation">{</span>CLUSTER_NAME<span class="token punctuation">}</span> --query nodeResourceGroup -otsv<span class="token variable">)</span></span>"</span><br><span class="token builtin class-name">export</span> <span class="token assign-left variable">IDENTITY_NAME</span><span class="token operator">=</span><span class="token string">"demo"</span><br>helm repo <span class="token function">add</span> aad-pod-identity https://raw.githubusercontent.com/Azure/aad-pod-identity/master/charts<br><span class="token comment"># helm install aad-pod-identity aad-pod-identity/aad-pod-identity</span><br><span class="token comment"># If you used kubenet as your CNI, please enable usage with kubenet </span><br>helm upgrade --install aad-pod-identity aad-pod-identity/aad-pod-identity --set nmi.allowNetworkPluginKubenet<span class="token operator">=</span>true</code></pre>
+<p>Now we create an identity and assign it a role &quot;Reader&quot; at Resource group scope. In reality, we should assign right amount of read and write role combination with minimal scope as per the requirement of access from the pod.</p>
+<pre class="language-shell"><code class="language-shell">az identity create -g <span class="token variable">${IDENTITY_RESOURCE_GROUP}</span> -n <span class="token variable">${IDENTITY_NAME}</span><br><span class="token builtin class-name">export</span> <span class="token assign-left variable">IDENTITY_CLIENT_ID</span><span class="token operator">=</span><span class="token string">"<span class="token variable"><span class="token variable">$(</span>az identity show -g $<span class="token punctuation">{</span>IDENTITY_RESOURCE_GROUP<span class="token punctuation">}</span> -n $<span class="token punctuation">{</span>IDENTITY_NAME<span class="token punctuation">}</span> --query clientId -otsv<span class="token variable">)</span></span>"</span><br><span class="token builtin class-name">export</span> <span class="token assign-left variable">IDENTITY_RESOURCE_ID</span><span class="token operator">=</span><span class="token string">"<span class="token variable"><span class="token variable">$(</span>az identity show -g $<span class="token punctuation">{</span>IDENTITY_RESOURCE_GROUP<span class="token punctuation">}</span> -n $<span class="token punctuation">{</span>IDENTITY_NAME<span class="token punctuation">}</span> --query <span class="token function">id</span> -otsv<span class="token variable">)</span></span>"</span><br><span class="token builtin class-name">export</span> <span class="token assign-left variable">IDENTITY_ASSIGNMENT_ID</span><span class="token operator">=</span><span class="token string">"<span class="token variable"><span class="token variable">$(</span>az role assignment create --role Reader --assignee $<span class="token punctuation">{</span>IDENTITY_CLIENT_ID<span class="token punctuation">}</span> --scope /subscriptions/$<span class="token punctuation">{</span>SUBSCRIPTION_ID<span class="token punctuation">}</span>/resourceGroups/$<span class="token punctuation">{</span>IDENTITY_RESOURCE_GROUP<span class="token punctuation">}</span> --query <span class="token function">id</span> -otsv<span class="token variable">)</span></span>"</span></code></pre>
+<p>Deploy PodIdentity and AzureIdentityBinding CRDs in AKS cluster</p>
+<pre class="language-shell"><code class="language-shell"><span class="token function">cat</span> <span class="token operator">&lt;&lt;</span><span class="token string">EOF<span class="token bash punctuation"> <span class="token operator">|</span> kubectl apply -f -</span><br>apiVersion: "aadpodidentity.k8s.io/v1"<br>kind: AzureIdentity<br>metadata:<br>  name: <span class="token variable">${IDENTITY_NAME}</span><br>spec:<br>  type: 0<br>  resourceID: <span class="token variable">${IDENTITY_RESOURCE_ID}</span><br>  clientID: <span class="token variable">${IDENTITY_CLIENT_ID}</span><br>EOF</span><br><br><span class="token function">cat</span> <span class="token operator">&lt;&lt;</span><span class="token string">EOF<span class="token bash punctuation"> <span class="token operator">|</span> kubectl apply -f -</span><br>apiVersion: "aadpodidentity.k8s.io/v1"<br>kind: AzureIdentityBinding<br>metadata:<br>  name: <span class="token variable">${IDENTITY_NAME}</span>-binding<br>spec:<br>  azureIdentity: <span class="token variable">${IDENTITY_NAME}</span><br>  selector: <span class="token variable">${IDENTITY_NAME}</span><br>EOF</span></code></pre>
+<p>Now lets deploy sample app to see if we can use the identity in the pod to query / interact with Azure.
+For a pod to match an identity binding, it needs a label with the key <code>aadpodidbinding</code> whose value is that of the <code>selector:</code> field in the AzureIdentityBinding.</p>
+<pre class="language-shell"><code class="language-shell"><span class="token function">cat</span> <span class="token operator">&lt;&lt;</span> <span class="token string">EOF<span class="token bash punctuation"> <span class="token operator">|</span> kubectl apply -f -</span><br>apiVersion: v1<br>kind: Pod<br>metadata:<br>  name: demo<br>  labels:<br>    aadpodidbinding: <span class="token variable">$IDENTITY_NAME</span><br>spec:<br>  containers:<br>  - name: demo<br>    image: mcr.microsoft.com/oss/azure/aad-pod-identity/demo:v1.7.1<br>    args:<br>      - --subscriptionid=<span class="token variable">${SUBSCRIPTION_ID}</span><br>      - --clientid=<span class="token variable">${IDENTITY_CLIENT_ID}</span><br>      - --resourcegroup=<span class="token variable">${IDENTITY_RESOURCE_GROUP}</span><br>    env:<br>      - name: MY_POD_NAME<br>        valueFrom:<br>          fieldRef:<br>            fieldPath: metadata.name<br>      - name: MY_POD_NAMESPACE<br>        valueFrom:<br>          fieldRef:<br>            fieldPath: metadata.namespace<br>      - name: MY_POD_IP<br>        valueFrom:<br>          fieldRef:<br>            fieldPath: status.podIP<br>  nodeSelector:<br>    kubernetes.io/os: linux<br>EOF</span></code></pre>
+<p>If everything was setup correctly, you will logs in <code>kubectl logs demo</code> similar to below:</p>
+<pre class="language-shell"><code class="language-shell"><span class="token punctuation">..</span>.<br>successfully doARMOperations vm count <span class="token number">1</span><br>successfully acquired a token using the MSI, msiEndpoint<span class="token punctuation">(</span>http://169.254.169.254/metadata/identity/oauth2/token<span class="token punctuation">)</span><br>successfully acquired a token, userAssignedID MSI, msiEndpoint<span class="token punctuation">(</span>http://169.254.169.254/metadata/identity/oauth2/token<span class="token punctuation">)</span> clientID<span class="token punctuation">(</span>xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx<span class="token punctuation">)</span><br>successfully made GET on instance metadata</code></pre>
+
+        </div>
+        <div class="col-lg-3 col-md-2 mx-auto">
+          <div>Categories</div>
+          <ul>
+          
+            <li>aks</li>
+          
+            <li>distribution</li>
+          
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+  <footer><div class="container"><div class="row"><div class="col-12">
+    &copy; 2020-2021. All right reserved. Vijay Dharap.
+  </div></div></div></footer>
+</body>
+
+</html>

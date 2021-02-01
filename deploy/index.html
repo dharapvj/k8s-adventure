@@ -52,7 +52,7 @@
 <ul>
 <li><strong>Ingress Controller</strong> - Ingress controller should be installed first so that other components can be accessed via ingress.</li>
 </ul>
-<pre class="language-shell"><code class="language-shell">kubectl create ns ingress-nginx<br>helm repo <span class="token function">add</span> ingress-nginx https://kubernetes.github.io/ingress-nginx<br>helm repo update<br><span class="token builtin class-name">cd</span> deploy<br>helm upgrade --install ingress-nginx ingress-nginx/ingress-nginx -n ingress-nginx -f ingress.yaml</code></pre>
+<pre class="language-shell"><code class="language-shell">kubectl create ns ingress-nginx<br>helm repo <span class="token function">add</span> ingress-nginx https://kubernetes.github.io/ingress-nginx<br>helm repo update<br><span class="token builtin class-name">cd</span> deploy<br><span class="token comment"># if deploying on AWS KOPS. This setups HTTPS and ACM certificate. (Must adjust ACM cert ARN in the yaml file)</span><br>helm upgrade --install ingress-nginx ingress-nginx/ingress-nginx -n ingress-nginx -f ingress.yaml<br><span class="token comment"># if deploying on Azure</span><br>helm upgrade --install ingress-nginx ingress-nginx/ingress-nginx -n ingress-nginx -f deploy/ingress-ctrl-azure.yaml</code></pre>
 <ul>
 <li><strong>Kubernetes Dashboard</strong> - Kubernete Dashboard.</li>
 </ul>
