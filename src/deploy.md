@@ -14,7 +14,10 @@ kubectl create ns ingress-nginx
 helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
 helm repo update
 cd deploy
+# if deploying on AWS KOPS. This setups HTTPS and ACM certificate. (Must adjust ACM cert ARN in the yaml file)
 helm upgrade --install ingress-nginx ingress-nginx/ingress-nginx -n ingress-nginx -f ingress.yaml
+# if deploying on Azure
+helm upgrade --install ingress-nginx ingress-nginx/ingress-nginx -n ingress-nginx -f deploy/ingress-ctrl-azure.yaml
 ```
 * __Kubernetes Dashboard__ - Kubernete Dashboard.
 ``` shell

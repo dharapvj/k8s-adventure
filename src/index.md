@@ -26,7 +26,7 @@ tags: [kubernetes, k8s, explore, adventures, index]
 ## Installation of Production Grade Kubernetes Distributions
 * [KOPS](./kops)
 * [EKS](./eks)
-* AKS
+* [AKS](./aks)
 * Kubermatic KubeOne
 * Kubespray
 
@@ -53,7 +53,7 @@ Please access [deploy](./deploy) page to access exact command to deploy these it
 
 ### Security
 * Using Hashicorp Vault for secrets. (Usage via In-cluster installation with Consul)
-* Authentication via OIDC using Keycloak / Dex FIXME
+* [Authentication via OIDC using Keycloak](./oauth/) / Dex
 
 ### Auto-scaling
 * Pod Autoscaling via [Horizontal Pod Autoscaler](./hpa) ( KOPS, EKS)
