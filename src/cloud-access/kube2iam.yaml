@@ -1,0 +1,15 @@
+image:
+  tag: 0.10.7
+host:
+  iptables: true
+  # Use this if we use Calico as our CNI
+  #interface: cali+
+  interface: cbr0
+rbac:
+  create: true
+nodeSelector:
+  kops.k8s.io/instancegroup: "nodes"
+extraArgs:
+  auto-discover-base-arn: 
+  auto-discover-default-role: 
+

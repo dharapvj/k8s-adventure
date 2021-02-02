@@ -63,7 +63,7 @@ Please access [deploy](./deploy) page to access exact command to deploy these it
 * [External DNS in KOPS](./external-dns)
 
 ### Access native cloud resouces from pods
-* kube2iam 
+* [kube2iam](./cloud-access/kube2iam) 
 * [aad-pod-identity](./cloud-access/aad-pod-identity)
 * gke workload identity
 
