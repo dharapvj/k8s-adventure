@@ -5,6 +5,7 @@ devDependencies:
   '@11ty/eleventy': 0.11.0
   '@11ty/eleventy-plugin-syntaxhighlight': 3.0.1_@11ty+eleventy@0.11.0
   '@toycode/markdown-it-class': 1.2.4
+  markdown-it-anchor: 7.0.1_markdown-it@11.0.0
   markdown-it-multicolumn: 0.1.5
   nunjucks: 3.2.2
 lockfileVersion: 5.2
@@ -1511,6 +1512,14 @@ packages:
       node: '>=0.10.0'
     resolution:
       integrity: sha1-wyq9C9ZSXZsFFkW7TyasXcmKDb8=
+  /markdown-it-anchor/7.0.1_markdown-it@11.0.0:
+    dependencies:
+      markdown-it: 11.0.0
+    dev: true
+    peerDependencies:
+      markdown-it: '*'
+    resolution:
+      integrity: sha512-FF+1jvBAX04jlDUyz2qZGiz5PKw8MwWPb2EJvjvIiVuz7DcVMfW7b3NQnAiH52DSIQfMJ0FCAsQjhUpAOTGLMg==
   /markdown-it-attrs/3.0.3_markdown-it@11.0.0:
     dependencies:
       markdown-it: 11.0.0
@@ -2732,6 +2741,7 @@ specifiers:
   '@11ty/eleventy-plugin-syntaxhighlight': ^3.0.1
   '@toycode/markdown-it-class': ^1.2.4
   markdown-it: ^11.0.0
+  markdown-it-anchor: ^7.0.1
   markdown-it-attrs: ^3.0.3
   markdown-it-multicolumn: ^0.1.5
   nunjucks: ^3.2.1

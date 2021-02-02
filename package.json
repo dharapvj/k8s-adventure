@@ -13,6 +13,7 @@
     "@11ty/eleventy": "^0.11.0",
     "@11ty/eleventy-plugin-syntaxhighlight": "^3.0.1",
     "@toycode/markdown-it-class": "^1.2.4",
+    "markdown-it-anchor": "^7.0.1",
     "markdown-it-multicolumn": "^0.1.5",
     "nunjucks": "^3.2.1"
   },

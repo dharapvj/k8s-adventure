@@ -59,7 +59,11 @@ Please access [deploy](./deploy) page to access exact command to deploy these it
 * Pod Autoscaling via [Horizontal Pod Autoscaler](./hpa) ( KOPS, EKS)
 * Node autoscaling via Cluster Autoscaler (EKS) FIXME
 
-### WIP ( External-DNS setup)
+### Automated DNS Management for services
+* [External DNS in KOPS](./external-dns)
 
-### WIP Access cloud resouces via kube2iam / aad-pod-identity / gke workload identity etc
+### Access native cloud resouces from pods
+* kube2iam 
+* [aad-pod-identity](./cloud-access/aad-pod-identity)
+* gke workload identity
 
