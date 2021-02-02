@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="shortcut icon" href="/k8s-adventure/css/adventure.ico" type="image/x-icon">
+    <link rel="stylesheet" href="/k8s-adventure/css/bootstrap.min.css">
+    <link href="/k8s-adventure/css/prism-vsc-dark-plus.css" rel="stylesheet" type="text/css">
+    <link href="/k8s-adventure/css/blog.css" rel="stylesheet" type="text/css">
+  <title>My Kubernetes Adventures - kube2iam - Access AWS resources from pod securely</title>
+</head>
+
+<body>
+  <header>
+  <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
+    <div class="container">
+      <a class="navbar-brand" href="/k8s-adventure/">My Kubernetes Adventures</a>
+      <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        Menu
+        <i class="fas fa-bars"></i>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="/">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/about/">About</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/contact/">Contact</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  </header>
+  <!-- <section class="masthead">
+    <div class="container">
+      <h1 class="title"> Kube2iam - Access Aws Resources From Pod Securely </h1>
+      <div class="author"> by Vijay Dharap </div>
+      <div class="ts"> <span> February 2, 2021 </span> / <span>aws,kops,cloud-access</span></div>  
+    </div>
+  </section> -->
+  <section class="main">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-9 col-md-10 mx-auto">
+          <h1 id="kube2iam---access-aws-resources-from-pod-securely">kube2iam - Access AWS resources from pod securely <a class="header-anchor" href="#kube2iam---access-aws-resources-from-pod-securely">¶</a></h1>
+<p><a href="https://github.com/jtblin/kube2iam">Kube2IAM</a> is a quite mature and wellknown tool allow pods deployed in kubernetes cluster in AWS to access AWS resources securely. e.g. Access s3 bucket to read or write / Connect to RDS using IAM Authentication etc.</p>
+<h2 id="pre-requesite">Pre-requesite <a class="header-anchor" href="#pre-requesite">¶</a></h2>
+<ol>
+<li>A Role which you want to attach to the pod. This role should have appropriate and minimal policies by which we all the pod to have access to required AWS resources.</li>
+<li>Assume-role-policy for this role should allow this role be assumed by the worker-node role. In case of kops based cluster, it would be nodes.YOUR_CLUSTER_NAME.k8s.local</li>
+</ol>
+<h2 id="installation">Installation <a class="header-anchor" href="#installation">¶</a></h2>
+<p>You can install it by using helm-chart. Its important to update the <code>host.interface</code> field to have correct value. In a default KOPS installtion, it would be kubenet.. so the interface value needs to be <code>cbr0</code>. In case calico it should be <code>cali+</code>. Customized values are present in cloud-access/kube2iam.yaml</p>
+<pre class="language-shell"><code class="language-shell">helm repo <span class="token function">add</span> kube2iam https://jtblin.github.io/kube2iam/<br>helm upgrade --install kube2iam kube2iam/kube2iam -f cloud-access/kube2iam.yaml</code></pre>
+<h3 id="applying-custom-role-to-the-pods">Applying custom role to the pods <a class="header-anchor" href="#applying-custom-role-to-the-pods">¶</a></h3>
+<p>You can make a custom role asssume different role by adding below annotation to the pod
+<code>iam.amazonaws.com/role: arn:aws:iam::&lt;your_acct_name&gt;:role/your_custom_role</code></p>
+<h2 id="verification">Verification <a class="header-anchor" href="#verification">¶</a></h2>
+<p>Assuming we attached AWS managed policy AmazonS3ReadOnlyAccess for the custom role and added below assume policy:</p>
+<pre class="language-json"><code class="language-json"><span class="token punctuation">{</span><br>  <span class="token property">"Version"</span><span class="token operator">:</span> <span class="token string">"2012-10-17"</span><span class="token punctuation">,</span><br>  <span class="token property">"Statement"</span><span class="token operator">:</span> <span class="token punctuation">[</span><br>    <span class="token punctuation">{</span><br>      <span class="token property">"Effect"</span><span class="token operator">:</span> <span class="token string">"Allow"</span><span class="token punctuation">,</span><br>      <span class="token property">"Principal"</span><span class="token operator">:</span> <span class="token punctuation">{</span><br>        <span class="token property">"Service"</span><span class="token operator">:</span> <span class="token string">"ec2.amazonaws.com"</span><br>      <span class="token punctuation">}</span><span class="token punctuation">,</span><br>      <span class="token property">"Action"</span><span class="token operator">:</span> <span class="token string">"sts:AssumeRole"</span><br>    <span class="token punctuation">}</span><span class="token punctuation">,</span><br>    <span class="token punctuation">{</span><br>      <span class="token property">"Sid"</span><span class="token operator">:</span> <span class="token string">""</span><span class="token punctuation">,</span><br>      <span class="token property">"Effect"</span><span class="token operator">:</span> <span class="token string">"Allow"</span><span class="token punctuation">,</span><br>      <span class="token property">"Principal"</span><span class="token operator">:</span> <span class="token punctuation">{</span><br>        <span class="token property">"AWS"</span><span class="token operator">:</span> <span class="token string">"arn:aws:iam::064814169464:role/nodes.kopsdemo.k8s.local"</span><br>      <span class="token punctuation">}</span><span class="token punctuation">,</span><br>      <span class="token property">"Action"</span><span class="token operator">:</span> <span class="token string">"sts:AssumeRole"</span><br>    <span class="token punctuation">}</span><br>  <span class="token punctuation">]</span><br><span class="token punctuation">}</span></code></pre>
+<p>and a sample pod.. like</p>
+<pre class="language-yaml"><code class="language-yaml"><span class="token key atrule">apiVersion</span><span class="token punctuation">:</span> v1<br><span class="token key atrule">kind</span><span class="token punctuation">:</span> Pod<br><span class="token key atrule">metadata</span><span class="token punctuation">:</span><br>  <span class="token key atrule">name</span><span class="token punctuation">:</span> aws<span class="token punctuation">-</span>cli<br>  <span class="token key atrule">labels</span><span class="token punctuation">:</span><br>    <span class="token key atrule">name</span><span class="token punctuation">:</span> aws<span class="token punctuation">-</span>cli<br>  <span class="token key atrule">annotations</span><span class="token punctuation">:</span><br>    <span class="token key atrule">iam.amazonaws.com/role</span><span class="token punctuation">:</span> arn<span class="token punctuation">:</span>aws<span class="token punctuation">:</span>iam<span class="token punctuation">:</span><span class="token punctuation">:</span>064814169464<span class="token punctuation">:</span>role/kube2iam<span class="token punctuation">-</span>test<span class="token punctuation">-</span>s3<span class="token punctuation">-</span>reader<span class="token punctuation">-</span>role<br><span class="token key atrule">spec</span><span class="token punctuation">:</span><br>  <span class="token key atrule">containers</span><span class="token punctuation">:</span><br>  <span class="token punctuation">-</span> <span class="token key atrule">image</span><span class="token punctuation">:</span> fstab/aws<span class="token punctuation">-</span>cli<br>    <span class="token key atrule">command</span><span class="token punctuation">:</span><br>      <span class="token punctuation">-</span> <span class="token string">"/home/aws/aws/env/bin/aws"</span><br>      <span class="token punctuation">-</span> <span class="token string">"s3"</span><br>      <span class="token punctuation">-</span> <span class="token string">"ls"</span><br>    <span class="token key atrule">name</span><span class="token punctuation">:</span> aws<span class="token punctuation">-</span>cli</code></pre>
+<p>and apply it using `kubectl apply -f kube2iam-test.yaml</p>
+<p>If everything is setup correctly, you will see your s3 buckets listed in pod logs.</p>
+
+        </div>
+        <div class="col-lg-3 col-md-2 mx-auto">
+          <div>Categories</div>
+          <ul>
+          
+            <li>aws</li>
+          
+            <li>kops</li>
+          
+            <li>cloud-access</li>
+          
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+  <footer><div class="container"><div class="row"><div class="col-12">
+    &copy; 2020-2021. All right reserved. Vijay Dharap.
+  </div></div></div></footer>
+</body>
+
+</html>
