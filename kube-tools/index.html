@@ -47,12 +47,12 @@
     <div class="container">
       <div class="row">
         <div class="col-lg-9 col-md-10 mx-auto">
-          <h1>Basic tools to interact with Kubernetes</h1>
+          <h1 id="basic-tools-to-interact-with-kubernetes">Basic tools to interact with Kubernetes <a class="header-anchor" href="#basic-tools-to-interact-with-kubernetes">¶</a></h1>
 <p>The basic tools for working in Kubernetes environment are kubectl and helm. These binaries are to be installed on your local development machine. They are client binaries and using them you can connect and interact with kubernetes cluster.</p>
-<h2>Kubectl</h2>
+<h2 id="kubectl">Kubectl <a class="header-anchor" href="#kubectl">¶</a></h2>
 <p>Install the kubectl tool using commands below.</p>
 <pre class="language-shell"><code class="language-shell"><span class="token function">curl</span> -LO <span class="token string">"https://dl.k8s.io/release/<span class="token variable"><span class="token variable">$(</span><span class="token function">curl</span> -L -s https://dl.k8s.io/release/stable.txt<span class="token variable">)</span></span>/bin/linux/amd64/kubectl"</span><br><span class="token function">sudo</span> <span class="token function">install</span> -o root -g root -m 0755 kubectl /usr/local/bin/kubectl<br><span class="token comment"># If you do not have sudo access - install it locally</span><br><span class="token function">mkdir</span> -p ~/.local/bin/kubectl<br><span class="token function">mv</span> ./kubectl ~/.local/bin/kubectl<br><span class="token comment"># and then add ~/.local/bin/kubectl to $PATH</span><br><br><span class="token comment"># test kubectl</span><br>kubectl version --client</code></pre>
-<h2>Helm (v3)</h2>
+<h2 id="helm-(v3)">Helm (v3) <a class="header-anchor" href="#helm-(v3)">¶</a></h2>
 <p>Run below commands for getting helm v3 installed.</p>
 <pre class="language-shell"><code class="language-shell"><span class="token function">curl</span> -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3<br><span class="token function">chmod</span> <span class="token number">700</span> get_helm.sh<br>./get_helm.sh</code></pre>
 

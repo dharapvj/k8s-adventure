@@ -47,16 +47,16 @@
     <div class="container">
       <div class="row">
         <div class="col-lg-9 col-md-10 mx-auto">
-          <h1>AWS Elastic Kubernetes Service</h1>
-<h2>Create EKS Cluster</h2>
+          <h1 id="aws-elastic-kubernetes-service">AWS Elastic Kubernetes Service <a class="header-anchor" href="#aws-elastic-kubernetes-service">¶</a></h1>
+<h2 id="create-eks-cluster">Create EKS Cluster <a class="header-anchor" href="#create-eks-cluster">¶</a></h2>
 <p>Below commands will help you install eksctl binary on ubuntu and use it to create EKS cluster quickly.</p>
 <pre class="language-shell"><code class="language-shell"><span class="token comment"># install eksctl</span><br><span class="token function">curl</span> --silent --location <span class="token string">"https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_<span class="token variable"><span class="token variable">$(</span><span class="token function">uname</span> -s<span class="token variable">)</span></span>_amd64.tar.gz"</span> <span class="token operator">|</span> <span class="token function">tar</span> xz -C /tmp<br><span class="token function">sudo</span> <span class="token function">mv</span> /tmp/eksctl /usr/local/bin<br>eksctl version<br><br><span class="token comment"># create cluster</span><br>eksctl create cluster --name vj-eks-1 --version <span class="token number">1.18</span> --region ap-south-1 --nodegroup-name eks-basic-nodes --nodes <span class="token number">1</span> --nodes-min <span class="token number">1</span> --nodes-max <span class="token number">1</span> --with-oidc --ssh-access --ssh-public-key dharapvv --managed --node-volume-size<span class="token operator">=</span><span class="token number">30</span><br><br><span class="token comment"># delete the cluster when work is done</span><br>eksctl delete cluster --name vj-eks-1 --region ap-south-1</code></pre>
-<h2>Cluster Autoscaler</h2>
+<h2 id="cluster-autoscaler">Cluster Autoscaler <a class="header-anchor" href="#cluster-autoscaler">¶</a></h2>
 <p><a href="https://docs.aws.amazon.com/eks/latest/userguide/cluster-autoscaler.html">Follow instructions here to add and test Cluster Autoscaling in EKS</a></p>
-<h2>Using AWS EIP CNI and pod networking security via AWS Sec Groups</h2>
+<h2 id="using-aws-eip-cni-and-pod-networking-security-via-aws-sec-groups">Using AWS EIP CNI and pod networking security via AWS Sec Groups <a class="header-anchor" href="#using-aws-eip-cni-and-pod-networking-security-via-aws-sec-groups">¶</a></h2>
 <p>FIXME - It did not work as per my expectations in my trials</p>
-<h2>Usage of AWS IAM Authentication (EKS Authentication)</h2>
-<h2>Delete EKS Cluster</h2>
+<h2 id="usage-of-aws-iam-authentication-(eks-authentication)">Usage of AWS IAM Authentication (EKS Authentication) <a class="header-anchor" href="#usage-of-aws-iam-authentication-(eks-authentication)">¶</a></h2>
+<h2 id="delete-eks-cluster">Delete EKS Cluster <a class="header-anchor" href="#delete-eks-cluster">¶</a></h2>
 <pre class="language-shell"><code class="language-shell">eksctl delete cluster --name vj-eks-1 --region ap-south-1</code></pre>
 
         </div>

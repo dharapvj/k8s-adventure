@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="shortcut icon" href="/k8s-adventure/css/adventure.ico" type="image/x-icon">
+    <link rel="stylesheet" href="/k8s-adventure/css/bootstrap.min.css">
+    <link href="/k8s-adventure/css/prism-vsc-dark-plus.css" rel="stylesheet" type="text/css">
+    <link href="/k8s-adventure/css/blog.css" rel="stylesheet" type="text/css">
+  <title>My Kubernetes Adventures - external-dns - Automate creation of domain names based on ingress</title>
+</head>
+
+<body>
+  <header>
+  <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
+    <div class="container">
+      <a class="navbar-brand" href="/k8s-adventure/">My Kubernetes Adventures</a>
+      <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        Menu
+        <i class="fas fa-bars"></i>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="/">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/about/">About</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/contact/">Contact</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  </header>
+  <!-- <section class="masthead">
+    <div class="container">
+      <h1 class="title"> External-dns - Automate Creation Of Domain Names Based On Ingress </h1>
+      <div class="author"> by Vijay Dharap </div>
+      <div class="ts"> <span> February 2, 2021 </span> / <span>aws,route53,kops,external-dns</span></div>  
+    </div>
+  </section> -->
+  <section class="main">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-9 col-md-10 mx-auto">
+          <h1 id="external-dns---automate-creation-of-domain-names-based-on-ingress">external-dns - Automate creation of domain names based on ingress <a class="header-anchor" href="#external-dns---automate-creation-of-domain-names-based-on-ingress">¶</a></h1>
+<p><a href="https://github.com/kubernetes-sigs/external-dns">external-dns</a> is a popular option with very wide support for DNS management on kubernetes. Typically, when you create a ingress with subdomain in <code>host</code> field, you would need to add additional DNS entry in your DNS provider (like Route53 in AWS) for this subdomain pointing to your ingress controller. External DNS automates these entry creations.</p>
+<h3 id="steps-to-setup-pre-requisits%2C-install-and-use-external-dns">Steps to setup pre-requisits, install and use External-DNS <a class="header-anchor" href="#steps-to-setup-pre-requisits%2C-install-and-use-external-dns">¶</a></h3>
+<ol>
+<li>Create hosted zone in Route53 (if you do not have it already). You can also make use of free domain name providers like freenom or dot.tk if you want a throwaway domain.</li>
+<li>Add a new IAM policy which allows update the hosted zone.
+Create IAM policy with below content. You should update <code>hostedzone/*</code> to <code>hostedzone/&lt;your hosted zone id&gt;</code> to make it more restrictive.</li>
+</ol>
+<pre class="language-json"><code class="language-json"><span class="highlight-line"><span class="token punctuation">{</span></span><br><span class="highlight-line">  <span class="token property">"Version"</span><span class="token operator">:</span> <span class="token string">"2012-10-17"</span><span class="token punctuation">,</span></span><br><span class="highlight-line">  <span class="token property">"Statement"</span><span class="token operator">:</span> <span class="token punctuation">[</span></span><br><span class="highlight-line">    <span class="token punctuation">{</span></span><br><span class="highlight-line">      <span class="token property">"Effect"</span><span class="token operator">:</span> <span class="token string">"Allow"</span><span class="token punctuation">,</span></span><br><span class="highlight-line">      <span class="token property">"Action"</span><span class="token operator">:</span> <span class="token punctuation">[</span></span><br><span class="highlight-line">        <span class="token string">"route53:ChangeResourceRecordSets"</span></span><br><span class="highlight-line">      <span class="token punctuation">]</span><span class="token punctuation">,</span></span><br><span class="highlight-line">      <span class="token property">"Resource"</span><span class="token operator">:</span> <span class="token punctuation">[</span></span><br><mark class="highlight-line highlight-line-active">        <span class="token string">"arn:aws:route53:::hostedzone/*"</span></mark><br><span class="highlight-line">      <span class="token punctuation">]</span></span><br><span class="highlight-line">    <span class="token punctuation">}</span><span class="token punctuation">,</span></span><br><span class="highlight-line">    <span class="token punctuation">{</span></span><br><span class="highlight-line">      <span class="token property">"Effect"</span><span class="token operator">:</span> <span class="token string">"Allow"</span><span class="token punctuation">,</span></span><br><span class="highlight-line">      <span class="token property">"Action"</span><span class="token operator">:</span> <span class="token punctuation">[</span></span><br><span class="highlight-line">        <span class="token string">"route53:ListHostedZones"</span><span class="token punctuation">,</span></span><br><span class="highlight-line">        <span class="token string">"route53:ListResourceRecordSets"</span></span><br><span class="highlight-line">      <span class="token punctuation">]</span><span class="token punctuation">,</span></span><br><span class="highlight-line">      <span class="token property">"Resource"</span><span class="token operator">:</span> <span class="token punctuation">[</span></span><br><span class="highlight-line">        <span class="token string">"*"</span></span><br><span class="highlight-line">      <span class="token punctuation">]</span></span><br><span class="highlight-line">    <span class="token punctuation">}</span></span><br><span class="highlight-line">  <span class="token punctuation">]</span></span><br><span class="highlight-line"><span class="token punctuation">}</span></span></code></pre>
+<ol start="3">
+<li>Associate this policy with instance profile of KOPS works nodes
+KOPS allows you to add below liens in your cluster spec to add this above policy to default node instance profile. Make sure you replace the ARN with the ARN of the policy which you defined in your AWS account.</li>
+</ol>
+<pre class="language-yaml"><code class="language-yaml"><span class="token key atrule">spec</span><span class="token punctuation">:</span><br>  <span class="token key atrule">externalPolicies</span><span class="token punctuation">:</span><br>     <span class="token key atrule">node</span><span class="token punctuation">:</span><br>     <span class="token punctuation">-</span> arn<span class="token punctuation">:</span>aws<span class="token punctuation">:</span>iam<span class="token punctuation">:</span><span class="token punctuation">:</span>&lt;youraccount<span class="token punctuation">></span><span class="token punctuation">:</span>policy/&lt;yourpolicyname<span class="token punctuation">></span><br></code></pre>
+<ol start="4">
+<li>Deploy ingress-controller helm-chart, if not already. (Refer <a href="../deploy">Deploy</a> page for details)</li>
+<li>Deploy external-dns helm-chart. Replace HOSTED_ZONE_ID and HOSTED_ZONE_NAME with your Route53 hosted zone details.</li>
+</ol>
+<pre class="language-shell"><code class="language-shell">helm upgrade --install external-dns <span class="token punctuation">\</span><br>  --set <span class="token assign-left variable">provider</span><span class="token operator">=</span>aws <span class="token punctuation">\</span><br>  --set aws.zoneType<span class="token operator">=</span>public <span class="token punctuation">\</span><br>  --set <span class="token assign-left variable">txtOwnerId</span><span class="token operator">=</span>HOSTED_ZONE_ID <span class="token punctuation">\</span><br>  --set domainFilters<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token operator">=</span>HOSTED_ZONE_NAME <span class="token punctuation">\</span><br>  bitnami/external-dns</code></pre>
+<ol start="5">
+<li>Test the setup by deploying a sample app with ingress (podinfo). Refer <a href="../deploy">Deploy</a> page for details.
+If you notice the <code>podinfo.yaml</code> in the deploy directory, you will see hostname added there. If the setup is correctly done, after the deployment, in about 2 minutes, the corresponding entry in Route53 will be created automatically.</li>
+</ol>
+<p>FIXME - add screenshots</p>
+<h3 id="references%3A">References: <a class="header-anchor" href="#references%3A">¶</a></h3>
+<ul>
+<li>https://github.com/kubernetes-sigs/external-dns/blob/master/docs/tutorials/aws.md</li>
+<li>https://artifacthub.io/packages/helm/bitnami/external-dns</li>
+<li>https://kops.sigs.k8s.io/iam_roles/#adding-external-policies</li>
+</ul>
+
+        </div>
+        <div class="col-lg-3 col-md-2 mx-auto">
+          <div>Categories</div>
+          <ul>
+          
+            <li>aws</li>
+          
+            <li>route53</li>
+          
+            <li>kops</li>
+          
+            <li>external-dns</li>
+          
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+  <footer><div class="container"><div class="row"><div class="col-12">
+    &copy; 2020-2021. All right reserved. Vijay Dharap.
+  </div></div></div></footer>
+</body>
+
+</html>

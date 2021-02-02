@@ -47,19 +47,19 @@
     <div class="container">
       <div class="row">
         <div class="col-lg-9 col-md-10 mx-auto">
-          <h1>Minikube</h1>
+          <h1 id="minikube">Minikube <a class="header-anchor" href="#minikube">¶</a></h1>
 <p><a href="https://minikube.sigs.k8s.io/docs/">Minikube</a> is one of the most basic and simplest way to get acquainted with Kubernetes. It creates single node cluster to experiment in matter of couple of minutes on your local machine.</p>
-<h2>Install and start the cluster</h2>
+<h2 id="install-and-start-the-cluster">Install and start the cluster <a class="header-anchor" href="#install-and-start-the-cluster">¶</a></h2>
 <pre class="language-shell"><code class="language-shell"><span class="token comment"># download and install</span><br><span class="token function">curl</span> -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64<br><span class="token function">sudo</span> <span class="token function">install</span> minikube-linux-amd64 /usr/local/bin/minikube<br><br><span class="token comment"># start</span><br>minikube start</code></pre>
-<h2>Addons</h2>
+<h2 id="addons">Addons <a class="header-anchor" href="#addons">¶</a></h2>
 <pre class="language-shell"><code class="language-shell">minikube addons list<br>minikube addons <span class="token builtin class-name">enable</span> ingress</code></pre>
-<h2>Caveats</h2>
+<h2 id="caveats">Caveats <a class="header-anchor" href="#caveats">¶</a></h2>
 <ul>
 <li>Basically, Minikube is best suited for testing kubernetes on local OS. If you use remote machine with CLI only, accessing services is pretty hard.</li>
 <li>Using LoadBalancer service needs <code>minikube tunnel</code> command and it only creates a temporary load balancer.</li>
 <li>You will not get external IP even if you use service of type NodePort.</li>
 </ul>
-<h2>Delete the cluster</h2>
+<h2 id="delete-the-cluster">Delete the cluster <a class="header-anchor" href="#delete-the-cluster">¶</a></h2>
 <pre class="language-shell"><code class="language-shell">minikube stop<br><span class="token comment"># If you want delete all the pods and services permanently, then...</span><br>minikube delete</code></pre>
 
         </div>

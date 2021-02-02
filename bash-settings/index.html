@@ -47,7 +47,7 @@
     <div class="container">
       <div class="row">
         <div class="col-lg-9 col-md-10 mx-auto">
-          <h1>Bash settings for developer environment</h1>
+          <h1 id="bash-settings-for-developer-environment">Bash settings for developer environment <a class="header-anchor" href="#bash-settings-for-developer-environment">¶</a></h1>
 <p>I use linux as my client machine to work in my kubernetes environment. Most of the work is done by firing various commands in the terminal. Hence the command history is a precious goldmine. Typically, bash is quite lax in saving the history and also ensuring the history is saved in multiple sessions running in parallel.</p>
 <p>Here are some of the things that we should do in order to ensure</p>
 <ul>
@@ -56,7 +56,7 @@
 <li>history from multiple sessions is merged (e.g. tmux, byobu, screen etc)</li>
 </ul>
 <pre class="language-shell"><code class="language-shell"><span class="token comment"># must be added in .bashrc</span><br><span class="token comment"># history gets appended / merged</span><br><span class="token builtin class-name">shopt</span> -s histappend<br><span class="token comment"># large history size</span><br><span class="token assign-left variable"><span class="token environment constant">HISTFILESIZE</span></span><span class="token operator">=</span><span class="token number">1000000</span><br><span class="token assign-left variable"><span class="token environment constant">HISTSIZE</span></span><span class="token operator">=</span><span class="token number">1000000</span><br><span class="token comment"># save all multiline commands in single line</span><br><span class="token builtin class-name">shopt</span> -s cmdhist<br><span class="token comment"># Save history after every command</span><br><span class="token assign-left variable">PROMPT_COMMAND</span><span class="token operator">=</span><span class="token string">'history -a'</span></code></pre>
-<h3>References:</h3>
+<h3 id="references%3A">References: <a class="header-anchor" href="#references%3A">¶</a></h3>
 <ul>
 <li><a href="https://blog.sanctum.geek.nz/better-bash-history/">Ref 1</a></li>
 <li><a href="https://www.thomaslaurenson.com/blog/2018/07/02/better-bash-history/">Ref 2</a></li>

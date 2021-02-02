@@ -47,8 +47,8 @@
     <div class="container">
       <div class="row">
         <div class="col-lg-9 col-md-10 mx-auto">
-          <h1>Home</h1>
-<h2>Setting up your developer environment terminal</h2>
+          <h1 id="home">Home <a class="header-anchor" href="#home">¶</a></h1>
+<h2 id="setting-up-your-developer-environment-terminal">Setting up your developer environment terminal <a class="header-anchor" href="#setting-up-your-developer-environment-terminal">¶</a></h2>
 <ul>
 <li><a href="./bash-settings">bash profile settings</a></li>
 <li><a href="./byobu">byobu</a></li>
@@ -59,13 +59,13 @@
 <li>Things to setup in Azure Account</li>
 <li>your common ssh-key for nodes</li>
 </ul>
-<h2>Installation of Simpler trial Kubernetes Distributions</h2>
+<h2 id="installation-of-simpler-trial-kubernetes-distributions">Installation of Simpler trial Kubernetes Distributions <a class="header-anchor" href="#installation-of-simpler-trial-kubernetes-distributions">¶</a></h2>
 <ul>
 <li><a href="./k3s">k3s</a></li>
 <li><a href="./minikube">Minikube</a></li>
 <li>Kind</li>
 </ul>
-<h2>Installation of Production Grade Kubernetes Distributions</h2>
+<h2 id="installation-of-production-grade-kubernetes-distributions">Installation of Production Grade Kubernetes Distributions <a class="header-anchor" href="#installation-of-production-grade-kubernetes-distributions">¶</a></h2>
 <ul>
 <li><a href="./kops">KOPS</a></li>
 <li><a href="./eks">EKS</a></li>
@@ -73,7 +73,7 @@
 <li>Kubermatic KubeOne</li>
 <li>Kubespray</li>
 </ul>
-<h2>Typical things to validate various Kubernetes features</h2>
+<h2 id="typical-things-to-validate-various-kubernetes-features">Typical things to validate various Kubernetes features <a class="header-anchor" href="#typical-things-to-validate-various-kubernetes-features">¶</a></h2>
 <p>Please access <a href="./deploy">deploy</a> page to access exact command to deploy these items in your cluster.</p>
 <ul>
 <li>Ingress Controller</li>
@@ -83,29 +83,37 @@
 <li>Autoscaling testing (both HPA and cluster)</li>
 <li>Storage testing</li>
 </ul>
-<h2>Installation of Multi-cluster Managers</h2>
+<h2 id="installation-of-multi-cluster-managers">Installation of Multi-cluster Managers <a class="header-anchor" href="#installation-of-multi-cluster-managers">¶</a></h2>
 <ul>
 <li>Kubermatic Kubernetes Platform (kkp)</li>
 <li>Rancher (To be added)</li>
 </ul>
-<h2>Explored Features</h2>
-<h3>Storage</h3>
+<h2 id="explored-features">Explored Features <a class="header-anchor" href="#explored-features">¶</a></h2>
+<h3 id="storage">Storage <a class="header-anchor" href="#storage">¶</a></h3>
 <ul>
 <li>Longhorn (on AWS KOPS)</li>
 <li>EFS</li>
 </ul>
-<h3>Security</h3>
+<h3 id="security">Security <a class="header-anchor" href="#security">¶</a></h3>
 <ul>
 <li>Using Hashicorp Vault for secrets. (Usage via In-cluster installation with Consul)</li>
 <li><a href="./oauth/">Authentication via OIDC using Keycloak</a> / Dex</li>
 </ul>
-<h3>Auto-scaling</h3>
+<h3 id="auto-scaling">Auto-scaling <a class="header-anchor" href="#auto-scaling">¶</a></h3>
 <ul>
 <li>Pod Autoscaling via <a href="./hpa">Horizontal Pod Autoscaler</a> ( KOPS, EKS)</li>
 <li>Node autoscaling via Cluster Autoscaler (EKS) FIXME</li>
 </ul>
-<h3>WIP ( External-DNS setup)</h3>
-<h3>WIP Access cloud resouces via kube2iam / aad-pod-identity / gke workload identity etc</h3>
+<h3 id="automated-dns-management-for-services">Automated DNS Management for services <a class="header-anchor" href="#automated-dns-management-for-services">¶</a></h3>
+<ul>
+<li><a href="./external-dns">External DNS in KOPS</a></li>
+</ul>
+<h3 id="access-native-cloud-resouces-from-pods">Access native cloud resouces from pods <a class="header-anchor" href="#access-native-cloud-resouces-from-pods">¶</a></h3>
+<ul>
+<li>kube2iam</li>
+<li><a href="./cloud-access/aad-pod-identity">aad-pod-identity</a></li>
+<li>gke workload identity</li>
+</ul>
 
         </div>
         <div class="col-lg-3 col-md-2 mx-auto">
