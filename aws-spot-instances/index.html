@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="shortcut icon" href="/k8s-adventure/css/adventure.ico" type="image/x-icon">
+    <link rel="stylesheet" href="/k8s-adventure/css/bootstrap.min.css">
+    <link href="/k8s-adventure/css/prism-vsc-dark-plus.css" rel="stylesheet" type="text/css">
+    <link href="/k8s-adventure/css/blog.css" rel="stylesheet" type="text/css">
+  <title>My Kubernetes Adventures - Using spot instances in kubernetes cluster</title>
+</head>
+
+<body>
+  <header>
+  <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
+    <div class="container">
+      <a class="navbar-brand" href="/k8s-adventure/">My Kubernetes Adventures</a>
+      <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        Menu
+        <i class="fas fa-bars"></i>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="/">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/about/">About</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/contact/">Contact</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  </header>
+  <!-- <section class="masthead">
+    <div class="container">
+      <h1 class="title"> Using Spot Instances In Kubernetes Cluster </h1>
+      <div class="author"> by Vijay Dharap </div>
+      <div class="ts"> <span> Feb 3rd, 2021 </span> / <span>aws,spot,kops,cost-optimization</span></div>  
+    </div>
+  </section> -->
+  <section class="main">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-9 col-md-10 mx-auto">
+          <h1 id="using-spot-instances-in-kubernetes-cluster">Using spot instances in kubernetes cluster <a class="header-anchor" href="#using-spot-instances-in-kubernetes-cluster">¶</a></h1>
+<p>In AWS, you get about 30-60% cost saving if you can make use of spot instances to run your workload!</p>
+<h2 id="using-spot-instances-in-kops">Using spot instances in KOPS <a class="header-anchor" href="#using-spot-instances-in-kops">¶</a></h2>
+<p>By default KOPS will setup on-demand instances for worker nodes. But its quite cost effective to switch to spot instances. KOPS also have more complex strategies to allow you mixed mode so that you can specify some worker nodes to be on-demand and then rest of the capacity as spot so that you do not end up with losing entire capacity of worker node group, etc.</p>
+<p>To use spot instances in KOPS, we must make use of yaml way to provision the cluster OR edit an existing cluster and add the option to specify spot instance pricing. You can find prevalent spot pricing in AWS Spot pricing page (under Pricing history).</p>
+<pre class="language-yaml"><code class="language-yaml"><span class="highlight-line"><span class="token key atrule">apiVersion</span><span class="token punctuation">:</span> kops.k8s.io/v1alpha2</span><br><span class="highlight-line"><span class="token key atrule">kind</span><span class="token punctuation">:</span> InstanceGroup</span><br><span class="highlight-line"><span class="token key atrule">spec</span><span class="token punctuation">:</span></span><br><span class="highlight-line">  <span class="token key atrule">machineType</span><span class="token punctuation">:</span> t3a.small</span><br><mark class="highlight-line highlight-line-active">  <span class="token key atrule">maxPrice</span><span class="token punctuation">:</span> <span class="token string">"0.0040"</span></mark></code></pre>
+<p>You can verify if your cluster is actually using Spot instances or not by checking Spot requests page in AWS console.</p>
+<h2 id="using-spot-instances-in-eks">Using spot instances in EKS <a class="header-anchor" href="#using-spot-instances-in-eks">¶</a></h2>
+<p>Similar to KOPS, in case of EKS, if you are using <code>eksctl</code> to create your cluster, you can make use of cluster spec yaml file to specify that you would like to use spot instances for the specified managed node group.</p>
+<pre class="language-yaml"><code class="language-yaml"><span class="highlight-line"><span class="token key atrule">managedNodeGroups</span><span class="token punctuation">:</span></span><br><span class="highlight-line">  <span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> YOUR_SPOT_NODE_GROUP</span><br><mark class="highlight-line highlight-line-active">    <span class="token key atrule">spot</span><span class="token punctuation">:</span> <span class="token boolean important">true</span></mark></code></pre>
+<p>References:</p>
+<ul>
+<li><a href="https://onica.com/blog/devops/aws-spot-instances-with-kubernetes-kops/">KOPS ref</a></li>
+<li><a href="https://aws.amazon.com/blogs/containers/amazon-eks-now-supports-provisioning-and-managing-ec2-spot-instances-in-managed-node-groups/">EKS Ref</a></li>
+</ul>
+
+        </div>
+        <div class="col-lg-3 col-md-2 mx-auto">
+          <div>Categories</div>
+          <ul>
+          
+            <li>aws</li>
+          
+            <li>spot</li>
+          
+            <li>kops</li>
+          
+            <li>cost-optimization</li>
+          
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+  <footer><div class="container"><div class="row"><div class="col-12">
+    &copy; 2020-2021. All right reserved. Vijay Dharap.
+  </div></div></div></footer>
+</body>
+
+</html>

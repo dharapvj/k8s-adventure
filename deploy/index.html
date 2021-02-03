@@ -61,6 +61,7 @@
 <li><strong>Monitoring</strong></li>
 </ul>
 <pre class="language-shell"><code class="language-shell"><span class="token builtin class-name">cd</span> deploy<br>kubectl create ns monitoring<br><br><span class="token comment"># install prometheus</span><br>helm repo <span class="token function">add</span> prometheus-community https://prometheus-community.github.io/helm-charts<br>helm repo update<br>helm upgrade --install prometheus prometheus-community/prometheus --version <span class="token number">13.0</span>.1 -f prometheus.yaml -n monitoring<br><br><span class="token comment"># install grafana</span><br>helm repo <span class="token function">add</span> grafana https://grafana.github.io/helm-charts<br>helm repo update<br>helm upgrade --install grafana grafana/grafana --version <span class="token number">6.1</span>.16 -f grafana.yaml -n monitoring</code></pre>
+<p>FIXME - add instructions on connecting grafana with prometheus and then adding well known grafana dashboards for gathering insights.</p>
 <ul>
 <li><strong>podinfo</strong> deployment</li>
 </ul>
