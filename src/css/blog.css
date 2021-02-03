@@ -42,7 +42,7 @@
 body {
   color: #212529;
   font-family: 'Merriweather', 'Times New Roman', Times, serif;
-  font-size: 1.1rem;
+  font-size: 1.0rem;
   padding-top: 56px;
 }
 
@@ -50,14 +50,29 @@ h1,h2,h3,h4,h5,h6 {
   font-family: 'Raleway', Arial, sans-serif;
   color: #b80d57;
 }
+.h1, h1 {
+  font-size: 2rem;
+}
 
-h2 {
+.h2, h2 {
+  font-size: 1.5rem;
   margin-top: 1.2rem;
 }
+
+.h3, h3 {
+  font-size: 1.2rem;
+}
+
 h3 {
   margin-top: 0.7rem;
 }
 
+p > code {
+  background-color: #eee;
+  padding: 0 5px;
+  border-radius: 3px;
+  font-size: 1rem;
+}
 
 header, .navbar-light .navbar-brand, .navbar-light .navbar-nav .nav-link {
   color: #b80d57;
@@ -70,8 +85,21 @@ header, .navbar-light .navbar-brand, .navbar-light .navbar-nav .nav-link {
   box-shadow: 0px -4px 10px #b80d57;
 }
 
+pre[class*="language-"] {
+  border-radius: 8px;
+  box-shadow: 3px 3px 3px -1px #999;
+}
+
 pre[class*="language-"], code[class*="language-"] {
   font-family: 'FantasqueSansMono', Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace
+}
+
+a.header-anchor {
+  color: #eee;
+}
+
+a.header-anchor:hover {
+  color: #0056b3;
 }
 
 .masthead {
@@ -88,6 +116,7 @@ pre[class*="language-"], code[class*="language-"] {
 
 footer {
   color: #b80d57;
+  margin: 50px 0 10px 0;
 }
 
 .multicolumn img {

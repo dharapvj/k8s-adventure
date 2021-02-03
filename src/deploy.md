@@ -42,6 +42,8 @@ helm repo add grafana https://grafana.github.io/helm-charts
 helm repo update
 helm upgrade --install grafana grafana/grafana --version 6.1.16 -f grafana.yaml -n monitoring
 ```
+FIXME - add instructions on connecting grafana with prometheus and then adding well known grafana dashboards for gathering insights.
+
 * __podinfo__ deployment
 ``` shell
 cd deploy

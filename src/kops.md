@@ -16,7 +16,8 @@ Important points about KOPS:
 * KOPS creates AutoScalingGroups (in AWS) for master and for nodes. You can easily scale horizontally and vertically by changing ASG (via [KOPS CLI](https://kops.sigs.k8s.io/cli/kops/). Direct AWS change are not required and recommended).
 * All the changes in KOPS are expected to done via configuration changes. Entire configuration is expressed via YAML. Detaild documentation of cluster API is [here](https://kops.sigs.k8s.io/cluster_spec/).
 
-Below cheatsheet can help you get kubernetes cluster created in AWS by running 5-6 commands.
+To create KOPS cluster you can either pass params to `kops create cluster` command OR you can profile a yaml file with all the details using `kops create -f kops-spec.yaml`
+Below cheatsheet can help you get KOPS cluster created by running 5-6 commands in both ways.
 
 ``` shell
 # read more here
@@ -31,12 +32,17 @@ export KOPS_STATE_STORE=s3://kops-sample-state-store
 # AWS credentials for KOPS to use.. You can use AWS_PROFILE / AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY combination. The IAM user must have [sufficient](https://kops.sigs.k8s.io/getting_started/aws/#setup-iam-user) permissions.
 export AWS_PROFILE=vj
 
+# Options 1 - Create cluster by passing params. (This is less flexible way)
 # You can customize zones as per your convenience
 kops create cluster --zones=ap-south-1a --node-count 1 \
   --node-size t3a.small \
   --master-volume-size 30 \
   --node-volume-size 30 \
   --master-size t3a.small  ${NAME}
+
+# Options 2 - Using spec.yaml
+kops create cluster  --zones=ap-south-1a --dry-run -o yaml $NAME  > kops-cluster.yaml
+kops create -f kops/kops-cluster.yaml
 
 # customize to provide your own public key. This will be used to allow ssh based login to master and worker nodes.
 kops create secret --name ${NAME} sshpublickey admin -i ~/.ssh/dharapvv.pub

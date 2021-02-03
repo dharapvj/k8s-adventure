@@ -67,3 +67,5 @@ Please access [deploy](./deploy) page to access exact command to deploy these it
 * [aad-pod-identity](./cloud-access/aad-pod-identity)
 * gke workload identity
 
+### Cost Optimizations
+* [Using spot instances in AWS](./aws-spot-instances)

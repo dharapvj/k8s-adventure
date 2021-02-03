@@ -1,0 +1,22 @@
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+
+metadata:
+  name: vj-eks-1
+  region: ap-south-1
+
+iam:
+  withOIDC: true
+
+managedNodeGroups:
+  - name: eks-basic-nodes
+    instanceType: t3a.small
+    desiredCapacity: 1
+    minSize: 1
+    maxSize: 1
+    volumeSize: 50
+    spot: true
+    ssh:
+      allow: true # will use ~/.ssh/id_rsa.pub as the default ssh key
+      publicKeyPath: ~/.ssh/dharapvv.pub
+
