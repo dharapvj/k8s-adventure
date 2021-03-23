@@ -1,0 +1,112 @@
+<h1 id="azure-quickstart-terraform-configs">Azure Quickstart Terraform configs <a class="header-anchor" href="#azure-quickstart-terraform-configs">¶</a></h1>
+<p>The Azure Quickstart Terraform configs can be used to create the needed
+infrastructure for a Kubernetes HA cluster. Check out the
+<a href="https://docs.kubermatic.com/kubeone/master/infrastructure/terraform_configs/">Creating Infrastructure guide</a> to learn more about how to
+use the configs and how to provision a Kubernetes cluster using KubeOne.</p>
+<h2 id="inputs">Inputs <a class="header-anchor" href="#inputs">¶</a></h2>
+<table class="table table-striped">
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+<th style="text-align:center">Type</th>
+<th style="text-align:center">Default</th>
+<th style="text-align:center">Required</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>cluster_name</td>
+<td>Name of the cluster</td>
+<td style="text-align:center">string</td>
+<td style="text-align:center">n/a</td>
+<td style="text-align:center">yes</td>
+</tr>
+<tr>
+<td>control_plane_vm_size</td>
+<td></td>
+<td style="text-align:center">string</td>
+<td style="text-align:center"><code>&quot;Standard_B2s&quot;</code></td>
+<td style="text-align:center">no</td>
+</tr>
+<tr>
+<td>location</td>
+<td></td>
+<td style="text-align:center">string</td>
+<td style="text-align:center"><code>&quot;westeurope&quot;</code></td>
+<td style="text-align:center">no</td>
+</tr>
+<tr>
+<td>ssh_agent_socket</td>
+<td>SSH Agent socket, default to grab from $SSH_AUTH_SOCK</td>
+<td style="text-align:center">string</td>
+<td style="text-align:center"><code>&quot;env:SSH_AUTH_SOCK&quot;</code></td>
+<td style="text-align:center">no</td>
+</tr>
+<tr>
+<td>ssh_port</td>
+<td>SSH port to be used to provision instances</td>
+<td style="text-align:center">string</td>
+<td style="text-align:center"><code>&quot;22&quot;</code></td>
+<td style="text-align:center">no</td>
+</tr>
+<tr>
+<td>ssh_private_key_file</td>
+<td>SSH private key file used to access instances</td>
+<td style="text-align:center">string</td>
+<td style="text-align:center"><code>&quot;&quot;</code></td>
+<td style="text-align:center">no</td>
+</tr>
+<tr>
+<td>ssh_public_key_file</td>
+<td>SSH public key file</td>
+<td style="text-align:center">string</td>
+<td style="text-align:center"><code>&quot;~/.ssh/id_rsa.pub&quot;</code></td>
+<td style="text-align:center">no</td>
+</tr>
+<tr>
+<td>ssh_username</td>
+<td>SSH user, used only in output</td>
+<td style="text-align:center">string</td>
+<td style="text-align:center"><code>&quot;ubuntu&quot;</code></td>
+<td style="text-align:center">no</td>
+</tr>
+<tr>
+<td>worker_os</td>
+<td>OS to run on worker machines</td>
+<td style="text-align:center">string</td>
+<td style="text-align:center"><code>&quot;ubuntu&quot;</code></td>
+<td style="text-align:center">no</td>
+</tr>
+<tr>
+<td>worker_vm_size</td>
+<td></td>
+<td style="text-align:center">string</td>
+<td style="text-align:center"><code>&quot;Standard_B2s&quot;</code></td>
+<td style="text-align:center">no</td>
+</tr>
+</tbody>
+</table>
+<h2 id="outputs">Outputs <a class="header-anchor" href="#outputs">¶</a></h2>
+<table class="table table-striped">
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>kubeone_api</td>
+<td>kube-apiserver LB endpoint</td>
+</tr>
+<tr>
+<td>kubeone_hosts</td>
+<td>Control plane endpoints to SSH to</td>
+</tr>
+<tr>
+<td>kubeone_workers</td>
+<td>Workers definitions, that will be transformed into MachineDeployment object</td>
+</tr>
+</tbody>
+</table>

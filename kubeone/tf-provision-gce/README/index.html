@@ -1,0 +1,163 @@
+<h1 id="gce-quickstart-terraform-configs">GCE Quickstart Terraform configs <a class="header-anchor" href="#gce-quickstart-terraform-configs">¶</a></h1>
+<p>The GCE Quickstart Terraform configs can be used to create the needed
+infrastructure for a Kubernetes HA cluster. Check out the following
+<a href="https://docs.kubermatic.com/kubeone/master/infrastructure/terraform_configs/">Creating Infrastructure guide</a> to learn more about how to
+use the configs and how to provision a Kubernetes cluster using KubeOne.</p>
+<h2 id="gce-provider-configuration">GCE Provider configuration <a class="header-anchor" href="#gce-provider-configuration">¶</a></h2>
+<h3 id="credentials">Credentials <a class="header-anchor" href="#credentials">¶</a></h3>
+<p>Per https://www.terraform.io/docs/providers/google/provider_reference.html#configuration-reference
+ether of the following ENV variables should be accessible:</p>
+<ul>
+<li><code>GOOGLE_CREDENTIALS</code></li>
+<li><code>GOOGLE_CLOUD_KEYFILE_JSON</code></li>
+<li><code>GCLOUD_KEYFILE_JSON</code></li>
+</ul>
+<h2 id="inputs">Inputs <a class="header-anchor" href="#inputs">¶</a></h2>
+<table class="table table-striped">
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+<th style="text-align:center">Type</th>
+<th style="text-align:center">Default</th>
+<th style="text-align:center">Required</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>cluster_name</td>
+<td>Name of the cluster</td>
+<td style="text-align:center">string</td>
+<td style="text-align:center">n/a</td>
+<td style="text-align:center">yes</td>
+</tr>
+<tr>
+<td>cluster_network_cidr</td>
+<td>Cluster network subnet cidr</td>
+<td style="text-align:center">string</td>
+<td style="text-align:center"><code>&quot;10.240.0.0/24&quot;</code></td>
+<td style="text-align:center">no</td>
+</tr>
+<tr>
+<td>control_plane_image_family</td>
+<td>Image family to use for provisioning instances</td>
+<td style="text-align:center">string</td>
+<td style="text-align:center"><code>&quot;ubuntu-1804-lts&quot;</code></td>
+<td style="text-align:center">no</td>
+</tr>
+<tr>
+<td>control_plane_image_project</td>
+<td>Project of the image to use for provisioning instances</td>
+<td style="text-align:center">string</td>
+<td style="text-align:center"><code>&quot;ubuntu-os-cloud&quot;</code></td>
+<td style="text-align:center">no</td>
+</tr>
+<tr>
+<td>control_plane_target_pool_members_count</td>
+<td></td>
+<td style="text-align:center">string</td>
+<td style="text-align:center"><code>&quot;3&quot;</code></td>
+<td style="text-align:center">no</td>
+</tr>
+<tr>
+<td>control_plane_type</td>
+<td>GCE instance type</td>
+<td style="text-align:center">string</td>
+<td style="text-align:center"><code>&quot;n1-standard-2&quot;</code></td>
+<td style="text-align:center">no</td>
+</tr>
+<tr>
+<td>control_plane_volume_size</td>
+<td>Size of the boot volume, in GB</td>
+<td style="text-align:center">string</td>
+<td style="text-align:center"><code>&quot;100&quot;</code></td>
+<td style="text-align:center">no</td>
+</tr>
+<tr>
+<td>project</td>
+<td>Project to be used for all resources</td>
+<td style="text-align:center">string</td>
+<td style="text-align:center">n/a</td>
+<td style="text-align:center">yes</td>
+</tr>
+<tr>
+<td>region</td>
+<td>GCP region to speak to</td>
+<td style="text-align:center">string</td>
+<td style="text-align:center"><code>&quot;europe-west3&quot;</code></td>
+<td style="text-align:center">no</td>
+</tr>
+<tr>
+<td>ssh_agent_socket</td>
+<td>SSH Agent socket, default to grab from $SSH_AUTH_SOCK</td>
+<td style="text-align:center">string</td>
+<td style="text-align:center"><code>&quot;env:SSH_AUTH_SOCK&quot;</code></td>
+<td style="text-align:center">no</td>
+</tr>
+<tr>
+<td>ssh_port</td>
+<td>SSH port to be used to provision instances</td>
+<td style="text-align:center">string</td>
+<td style="text-align:center"><code>&quot;22&quot;</code></td>
+<td style="text-align:center">no</td>
+</tr>
+<tr>
+<td>ssh_private_key_file</td>
+<td>SSH private key file used to access instances</td>
+<td style="text-align:center">string</td>
+<td style="text-align:center"><code>&quot;&quot;</code></td>
+<td style="text-align:center">no</td>
+</tr>
+<tr>
+<td>ssh_public_key_file</td>
+<td>SSH public key file</td>
+<td style="text-align:center">string</td>
+<td style="text-align:center"><code>&quot;~/.ssh/id_rsa.pub&quot;</code></td>
+<td style="text-align:center">no</td>
+</tr>
+<tr>
+<td>ssh_username</td>
+<td>SSH user, used only in output</td>
+<td style="text-align:center">string</td>
+<td style="text-align:center"><code>&quot;root&quot;</code></td>
+<td style="text-align:center">no</td>
+</tr>
+<tr>
+<td>worker_os</td>
+<td>OS to run on worker machines</td>
+<td style="text-align:center">string</td>
+<td style="text-align:center"><code>&quot;ubuntu&quot;</code></td>
+<td style="text-align:center">no</td>
+</tr>
+<tr>
+<td>workers_type</td>
+<td>GCE instance type</td>
+<td style="text-align:center">string</td>
+<td style="text-align:center"><code>&quot;n1-standard-2&quot;</code></td>
+<td style="text-align:center">no</td>
+</tr>
+</tbody>
+</table>
+<h2 id="outputs">Outputs <a class="header-anchor" href="#outputs">¶</a></h2>
+<table class="table table-striped">
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>kubeone_api</td>
+<td>kube-apiserver LB endpoint</td>
+</tr>
+<tr>
+<td>kubeone_hosts</td>
+<td>Control plane endpoints to SSH to</td>
+</tr>
+<tr>
+<td>kubeone_workers</td>
+<td>Workers definitions, that will be transformed into MachineDeployment object</td>
+</tr>
+</tbody>
+</table>

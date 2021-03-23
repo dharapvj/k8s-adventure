@@ -52,18 +52,26 @@
 <ul>
 <li><strong>Ingress Controller</strong> - Ingress controller should be installed first so that other components can be accessed via ingress.</li>
 </ul>
-<pre class="language-shell"><code class="language-shell">kubectl create ns ingress-nginx<br>helm repo <span class="token function">add</span> ingress-nginx https://kubernetes.github.io/ingress-nginx<br>helm repo update<br><span class="token builtin class-name">cd</span> deploy<br><span class="token comment"># if deploying on AWS KOPS. This setups HTTPS and ACM certificate. (Must adjust ACM cert ARN in the yaml file)</span><br>helm upgrade --install ingress-nginx ingress-nginx/ingress-nginx -n ingress-nginx -f ingress.yaml<br><span class="token comment"># if deploying on Azure</span><br>helm upgrade --install ingress-nginx ingress-nginx/ingress-nginx -n ingress-nginx -f deploy/ingress-ctrl-azure.yaml</code></pre>
+<pre class="language-shell"><code class="language-shell">helm repo <span class="token function">add</span> ingress-nginx https://kubernetes.github.io/ingress-nginx<br>helm repo update<br><br>kubectl create ns ingress-nginx<br><span class="token comment"># if deploying on AWS KOPS. This setups HTTPS and ACM certificate. (Must adjust ACM cert ARN in the yaml file)</span><br>helm upgrade --install ingress-nginx ingress-nginx/ingress-nginx -n ingress-nginx -f deploy/ingress.yaml<br><span class="token comment"># if deploying on Azure/GCP</span><br>helm upgrade --install ingress-nginx ingress-nginx/ingress-nginx -n ingress-nginx -f deploy/ingress-ctrl-non-aws.yaml<br></code></pre>
 <ul>
 <li><strong>Kubernetes Dashboard</strong> - Kubernete Dashboard.</li>
 </ul>
-<pre class="language-shell"><code class="language-shell"><span class="token builtin class-name">cd</span> deploy<br>kubectl create ns dashboard<br>helm repo <span class="token function">add</span> kubernetes-dashboard https://kubernetes.github.io/dashboard/<br>helm repo update<br>helm upgrade --install k8s-dashboard kubernetes-dashboard/kubernetes-dashboard -f k8s-dashboard.yaml -n dashboard</code></pre>
+<pre class="language-shell"><code class="language-shell"><span class="token builtin class-name">cd</span> deploy<br>helm repo <span class="token function">add</span> kubernetes-dashboard https://kubernetes.github.io/dashboard/<br>helm repo update<br>kubectl create ns dashboard<br>helm upgrade --install k8s-dashboard kubernetes-dashboard/kubernetes-dashboard -f k8s-dashboard.yaml -n dashboard<br></code></pre>
 <ul>
 <li><strong>Monitoring</strong></li>
 </ul>
-<pre class="language-shell"><code class="language-shell"><span class="token builtin class-name">cd</span> deploy<br>kubectl create ns monitoring<br><br><span class="token comment"># install prometheus</span><br>helm repo <span class="token function">add</span> prometheus-community https://prometheus-community.github.io/helm-charts<br>helm repo update<br>helm upgrade --install prometheus prometheus-community/prometheus --version <span class="token number">13.0</span>.1 -f prometheus.yaml -n monitoring<br><br><span class="token comment"># install grafana</span><br>helm repo <span class="token function">add</span> grafana https://grafana.github.io/helm-charts<br>helm repo update<br>helm upgrade --install grafana grafana/grafana --version <span class="token number">6.1</span>.16 -f grafana.yaml -n monitoring</code></pre>
-<p>FIXME - add instructions on connecting grafana with prometheus and then adding well known grafana dashboards for gathering insights.</p>
+<pre class="language-shell"><code class="language-shell"><span class="token builtin class-name">cd</span> deploy<br>kubectl create ns monitoring<br><br><span class="token comment"># WARN: In some kubernetes distributions, you may need to add a default StorageClass. If prometheus pods in below install remain pending for PVCs.. check for storageclass first.</span><br><span class="token comment"># use storageclass-*.yaml to create the same first</span><br><span class="token comment"># install prometheus</span><br>helm repo <span class="token function">add</span> prometheus-community https://prometheus-community.github.io/helm-charts<br>helm repo update<br>helm upgrade --install prometheus prometheus-community/prometheus --version <span class="token number">13.0</span>.1 -f prometheus.yaml -n monitoring<br><br><span class="token comment"># install grafana</span><br>helm repo <span class="token function">add</span> grafana https://grafana.github.io/helm-charts<br>helm repo update<br>helm upgrade --install grafana grafana/grafana --version <span class="token number">6.1</span>.16 -f grafana.yaml -n monitoring<br></code></pre>
+<p><strong>Connect Grafana with Prometheus and start monitoring your cluster</strong></p>
 <ul>
-<li><strong>podinfo</strong> deployment</li>
+<li>
+<p>After logging into grafana as admin, you can add datasource of type prometheus. For the server URL, give value as <code>http://prometheus-server/prometheus</code> and save.</p>
+</li>
+<li>
+<p>Once prometheus is connected, you can look at monitoring data by importing some of the popular grafana dashboards like 9614 (Node Exporter Full), 315 (kubernetes cluster monitoring), 10518, 3149, 4686, App metrics 1471, 8685, 5228, etc. There are way too many dashboards to list all good ones. Please explore and learn.</p>
+</li>
+<li>
+<p><strong>podinfo</strong> deployment</p>
+</li>
 </ul>
 <pre class="language-shell"><code class="language-shell"><span class="token builtin class-name">cd</span> deploy<br>kubectl apply -k github.com/stefanprodan/podinfo//kustomize<br>kubectl apply -f podinfo.yaml</code></pre>
 <ul>

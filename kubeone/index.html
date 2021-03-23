@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="shortcut icon" href="/k8s-adventure/css/adventure.ico" type="image/x-icon">
+    <link rel="stylesheet" href="/k8s-adventure/css/bootstrap.min.css">
+    <link href="/k8s-adventure/css/prism-vsc-dark-plus.css" rel="stylesheet" type="text/css">
+    <link href="/k8s-adventure/css/blog.css" rel="stylesheet" type="text/css">
+  <title>My Kubernetes Adventures - Kubermatic KubeOne - Quick HA Production Grade kubernetes cluster</title>
+</head>
+
+<body>
+  <header>
+  <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
+    <div class="container">
+      <a class="navbar-brand" href="/k8s-adventure/">My Kubernetes Adventures</a>
+      <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        Menu
+        <i class="fas fa-bars"></i>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="/">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/about/">About</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/contact/">Contact</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  </header>
+  <!-- <section class="masthead">
+    <div class="container">
+      <h1 class="title"> Kubermatic Kubeone - Quick Ha Production Grade Kubernetes Cluster </h1>
+      <div class="author"> by Vijay Dharap </div>
+      <div class="ts"> <span> March 18, 2021 </span> / <span>kubernetes,distribution,production-grade</span></div>  
+    </div>
+  </section> -->
+  <section class="main">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-9 col-md-10 mx-auto">
+          <h1 id="kubermatic-kubeone---quick-ha-production-grade-kubernetes-cluster">Kubermatic KubeOne - Quick HA Production Grade kubernetes cluster <a class="header-anchor" href="#kubermatic-kubeone---quick-ha-production-grade-kubernetes-cluster">¶</a></h1>
+<p><a href="https://docs.kubermatic.com/kubeone/">KubeOne</a> is profession production grade kubernetes distribution by Kubermatic. It helps creation of HA cluster across many different cloud providers like AWS, Azure, GCP, hetzner, as well as on-prem like OpenStack and vSphere. You can get a cluster setup done in about 10 minutes. It also provides declarative configuration using yaml based configuration. It uses Cluster-API and MachineController APIs to easily add, remove, upgrade, scale the nodes.</p>
+<h2 id="installation">Installation <a class="header-anchor" href="#installation">¶</a></h2>
+<ol>
+<li>Get Kubeone by running <code>curl -sfL get.kubeone.io | sh</code> in terminal. This will install kubeone binary in your <code>/usr/local/bin</code> folder and unpack example terraform config in current directory. The unpacked terraform example are present in <code>kubeone</code> directory of this github repository.</li>
+<li>Enable the shell completion via <code>source &lt;(kubeone completion zsh)</code> / <code>source &lt;(kubeone completion bash)</code> depending upon your shell.</li>
+<li>navigate to appropriate example directory for your trial. e.g. <code>examples/terraform/aws</code> for setting up Kubeone on AWS.</li>
+<li>Setup AWS profile via <code>export AWS_PROFLE=xxx</code> / credentials.</li>
+<li>If you are using GCP you can use <code>export GOOGLE_CREDENTIALS=xxxx.json</code> to set credentials json path.</li>
+<li>Create minimal <code>terraform.tfvars</code> to customize terraform variables. You can customize every variable in terraform.<pre class="language-hcl"><code class="language-hcl"><span class="token comment"># tfvars for AWS</span><br><span class="token property">cluster_name</span> <span class="token punctuation">=</span> <span class="token string">"vj1"</span><br><span class="token property">ssh_public_key_file</span> <span class="token punctuation">=</span> <span class="token string">"~/.ssh/id_rsa.pub"</span><br><span class="token comment"># optional</span><br><span class="token comment">#aws_region="ap-south-1"</span></code></pre>
+OR<pre class="language-hcl"><code class="language-hcl"><span class="token comment"># tfvars for GCP</span><br><span class="token property">cluster_name</span> <span class="token punctuation">=</span> <span class="token string">"vj1"</span><br><span class="token property">ssh_public_key_file</span> <span class="token punctuation">=</span> <span class="token string">"~/.ssh/id_rsa.pub"</span><br><span class="token property">project</span> <span class="token punctuation">=</span> <span class="token string">"personal"</span> <span class="token comment">#GCP project name</span><br><span class="token comment"># optional</span><br><span class="token comment">#aws_region="ap-south-1"</span></code></pre>
+</li>
+<li>You will need to have ssh key specified above added in ssh-agent. (<a href="https://docs.kubermatic.com/kubeone/v1.2/prerequisites/ssh/">Option exists to provide it directly as well without using sss-agent</a>). Use below script to add keys to ssh-agent.<pre class="language-shell"><code class="language-shell"><span class="token builtin class-name">eval</span> <span class="token variable"><span class="token variable">`</span>ssh-agent<span class="token variable">`</span></span><br>ssh-add ~/.ssh/id_rsa <span class="token comment"># or any other PEM private key!</span></code></pre>
+</li>
+<li>Once this done, create infrastructure using terraform<pre class="language-shell"><code class="language-shell">terraform init<br>terraform plan<br><span class="token comment"># for everything else except GCP</span><br>terraform apply<br><span class="token comment"># If using GCP... use below apply command</span><br><span class="token comment">#terraform apply -var=control_plane_target_pool_members_count=1</span><br><br><span class="token comment"># Copy the output in json format so that kubeone can use it to install infra on it</span><br>terraform output -json <span class="token operator">></span> tf.json</code></pre>
+</li>
+<li>Now create the minimal kubeone config yaml file.</li>
+<li>Use kubeone to create k8s cluster<pre class="language-shell"><code class="language-shell">kubeone apply --manifest kubeone.yaml -t tf.json</code></pre>
+</li>
+<li>Post installation, a kubeconfig file prefix as your project name will be created in the current working directory. You can use that kubeconfig to connect to new kubeone kubernetes cluster.</li>
+<li>You can also have additional addons</li>
+</ol>
+
+        </div>
+        <div class="col-lg-3 col-md-2 mx-auto">
+          <div>Categories</div>
+          <ul>
+          
+            <li>kubernetes</li>
+          
+            <li>distribution</li>
+          
+            <li>production-grade</li>
+          
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+  <footer><div class="container"><div class="row"><div class="col-12">
+    &copy; 2020-2021. All right reserved. Vijay Dharap.
+  </div></div></div></footer>
+</body>
+
+</html>
