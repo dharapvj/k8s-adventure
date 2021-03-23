@@ -9,8 +9,8 @@ metadata:
   name: podinfo
 spec:
   rules:
-  - host: podinfo.kops.dh4r4pvj.ga
-    http:
+          #- host: podinfo.kops.dh4r4pvj.ga
+  - http:
       paths:
       - path: /podinfo/(.*)
         backend:

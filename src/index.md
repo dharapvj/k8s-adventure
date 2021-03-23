@@ -27,7 +27,7 @@ tags: [kubernetes, k8s, explore, adventures, index]
 * [KOPS](./kops)
 * [EKS](./eks)
 * [AKS](./aks)
-* Kubermatic KubeOne
+* [Kubermatic KubeOne](./kubeone)
 * Kubespray
 
 ## Typical things to validate various Kubernetes features

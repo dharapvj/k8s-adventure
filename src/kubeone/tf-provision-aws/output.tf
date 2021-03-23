@@ -68,7 +68,7 @@ output "kubeone_workers" {
           vpcId            = data.aws_vpc.selected.id
           subnetId         = local.subnets[local.zoneA]
           instanceType     = var.worker_type
-          assignPublicIP   = true
+          assignPublicIP   = false
           diskSize         = 50
           diskType         = "gp2"
           ## Only applicable if diskType = io1

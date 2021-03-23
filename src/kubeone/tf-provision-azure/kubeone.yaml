@@ -1,0 +1,23 @@
+apiVersion: kubeone.io/v1beta1
+kind: KubeOneCluster
+versions:
+  kubernetes: '1.17.17'
+cloudProvider:
+  azure: {}
+  cloudConfig: |
+    {
+      "tenantId": "Azure Tenant",
+      "subscriptionId": "Azure Subscription",
+      "aadClientId": "Azure Client",
+      "aadClientSecret": "Azure Client Secret",
+      "resourceGroup": "vj1-rg",
+      "location": "westeurope",
+      "subnetName": "vj1-subnet",
+      "routeTableName": "",
+      "securityGroupName": "vj1-sg",
+      "vnetName": "vj1-vpc",
+      "primaryAvailabilitySetName": "vj1-avset",
+      "useInstanceMetadata": true,
+      "useManagedIdentityExtension": false,
+      "userAssignedIdentityID": ""
+    }

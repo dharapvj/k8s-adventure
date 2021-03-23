@@ -4,4 +4,9 @@ node_modules
 src/kkp/charts/
 .terraform
 terraform.tfstate
+terraform.tfstate.backup
 .terraform.lock.hcl
+tf.json
+*-kubeconfig
+creds-file
+set-*creds.sh

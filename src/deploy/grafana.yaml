@@ -4,9 +4,9 @@ ingress:
     kubernetes.io/ingress.class: nginx
     nginx.ingress.kubernetes.io/rewrite-target: /$1
   hosts:
-    - a312d7f78df794241a320baa5c49f32f-359407809.ap-south-1.elb.amazonaws.com
+    - "some.com"
   path: /grafana/?(.*)
 grafana.ini:
   server:
-    domain: a312d7f78df794241a320baa5c49f32f-359407809.ap-south-1.elb.amazonaws.com
-    root_url: https://a312d7f78df794241a320baa5c49f32f-359407809.ap-south-1.elb.amazonaws.com/grafana
+    domain: 35.242.230.236
+    root_url: http://35.242.230.236/grafana
