@@ -18,6 +18,9 @@ provider "azurerm" {
   features {}
 }
 
+provider "time" {
+}
+
 resource "azurerm_resource_group" "rg" {
   name     = "${var.cluster_name}-rg"
   location = var.location
@@ -30,6 +33,20 @@ resource "azurerm_resource_group" "rg" {
 
 resource "azurerm_availability_set" "avset" {
   name                         = "${var.cluster_name}-avset"
+  location                     = var.location
+  resource_group_name          = azurerm_resource_group.rg.name
+  platform_fault_domain_count  = 2
+  platform_update_domain_count = 2
+  managed                      = true
+
+  tags = {
+    environment = "kubeone"
+    cluster     = var.cluster_name
+  }
+}
+
+resource "azurerm_availability_set" "avset_worker" {
+  name                         = "${var.cluster_name}-avset-worker"
   location                     = var.location
   resource_group_name          = azurerm_resource_group.rg.name
   platform_fault_domain_count  = 2
@@ -78,6 +95,28 @@ resource "azurerm_network_security_group" "sg" {
     destination_address_prefix = "*"
   }
 
+  security_rule {
+    name                       = "Azure_LB_to_VMs_1"
+    priority                   = 1002
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "443"
+    source_address_prefix      = "AzureLoadBalancer"
+    destination_address_prefix = "*"
+  }
+  security_rule {
+    name                       = "Azure_LB_to_VMs_2"
+    priority                   = 1003
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "80"
+    source_address_prefix      = "AzureLoadBalancer"
+    destination_address_prefix = "*"
+  }
   tags = {
     environment = "kubeone"
     cluster     = var.cluster_name
@@ -97,7 +136,7 @@ resource "azurerm_public_ip" "lbip" {
 }
 
 resource "azurerm_public_ip" "control_plane" {
-  count = 3
+  count = var.control_plane_vm_count
 
   name                = "${var.cluster_name}-cp-${count.index}"
   location            = var.location
@@ -127,7 +166,6 @@ resource "azurerm_lb" "lb" {
 }
 
 resource "azurerm_lb_backend_address_pool" "backend_pool" {
-  resource_group_name = azurerm_resource_group.rg.name
   loadbalancer_id     = azurerm_lb.lb.id
   name                = "ApiServers"
 }
@@ -158,7 +196,7 @@ resource "azurerm_lb_probe" "lb_probe" {
 }
 
 resource "azurerm_network_interface" "control_plane" {
-  count = 3
+  count = var.control_plane_vm_count
 
   name                = "${var.cluster_name}-cp-${count.index}"
   location            = var.location
@@ -173,7 +211,7 @@ resource "azurerm_network_interface" "control_plane" {
 }
 
 resource "azurerm_network_interface_backend_address_pool_association" "control_plane" {
-  count = 3
+  count = var.control_plane_vm_count
 
   ip_configuration_name   = "${var.cluster_name}-cp-${count.index}"
   network_interface_id    = element(azurerm_network_interface.control_plane.*.id, count.index)
@@ -181,7 +219,7 @@ resource "azurerm_network_interface_backend_address_pool_association" "control_p
 }
 
 resource "azurerm_virtual_machine" "control_plane" {
-  count = 3
+  count = var.control_plane_vm_count
 
   name                             = "${var.cluster_name}-cp-${count.index}"
   location                         = var.location
@@ -194,9 +232,9 @@ resource "azurerm_virtual_machine" "control_plane" {
 
   storage_image_reference {
     publisher = "Canonical"
-    offer     = "UbuntuServer"
-    sku       = "18.04-LTS"
-    version   = "latest"
+    offer     = "0001-com-ubuntu-server-focal"
+    sku       = "20_04-lts-gen2"
+    version   = "20.04.202102010"
   }
 
   storage_os_disk {

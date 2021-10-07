@@ -1,0 +1,12 @@
+controller:
+  config:
+    use-proxy-protocol: "false"
+    enable-underscores-in-headers: "true"
+    server-tokens: "false"
+    use-forwarded-headers: "true"
+    proxy-real-ip-cidr: "172.20.0.0/16"
+  # for AZURE - This is mandatory
+  hostPort:
+    enabled: true
+defaultBackend:
+  enabled: true

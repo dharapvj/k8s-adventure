@@ -48,13 +48,16 @@ kops create -f kops/kops-cluster.yaml
 kops create secret --name ${NAME} sshpublickey admin -i ~/.ssh/dharapvv.pub
 
 # You can skip --yes param below to dry-run your changes.
-kops update cluster ${NAME} --yes
+# --admin downloads admin kubeconfig for you to use
+kops update cluster ${NAME} --yes --admin
+# newer versions of kops force you to manually download kubeconfig with admin priviledges
+# kops export kubecfg ${NAME} --admin
 kops validate cluster --wait 10m
 
 # Later on more customizations to instance groups etc can be done and cluster can be updated again
 kops get ig
-kops edit ig nodes
-kops update cluster ${NAME} --yes
+kops edit ig nodes-XXXX # XXXX will be your AWS region
+kops update cluster ${NAME} --yes --admin
 
 # If you want to delete the cluster, use below command
 kops delete cluster --name ${NAME} --yes

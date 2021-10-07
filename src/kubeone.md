@@ -44,7 +44,8 @@ tags: [kubernetes, distribution, production-grade]
     terraform plan
     # for everything else except GCP
     terraform apply
-    # If using GCP... use below apply command
+    # If using GCP... use below apply commands after downlading the service account json
+    # export GOOGLE_CREDENTIALS=$(cat ./XXXX.json)
     #terraform apply -var=control_plane_target_pool_members_count=1
 
     # Copy the output in json format so that kubeone can use it to install infra on it
@@ -53,7 +54,19 @@ tags: [kubernetes, distribution, production-grade]
 1. Now create the minimal kubeone config yaml file.
 1. Use kubeone to create k8s cluster
     ```shell
-    kubeone apply --manifest kubeone.yaml -t tf.json
+    kubeone apply --manifest kubeone.yaml -t tf.json --verbose
+    ```
+1. Watch cluster getting setup
+    ```shell
+    # Replace <CLUSTER_NAME> with name of the cluster you provided in kubeone config yaml.
+    export KUBECONFIG=./<CLUSTER_NAME>-kubeconfig
+    kubectl get md,ms,ma,node -n kube-system
+    kubectl get node -w
     ```
 1. Post installation, a kubeconfig file prefix as your project name will be created in the current working directory. You can use that kubeconfig to connect to new kubeone kubernetes cluster.
 1. You can also have additional addons
+1. To destroy
+    ```shell
+    kubeone reset --manifest kubeone.yaml -t tf.json --verbose
+    terraform destroy
+    ```
