@@ -61,13 +61,17 @@ OR<pre class="language-hcl"><code class="language-hcl"><span class="token commen
 </li>
 <li>You will need to have ssh key specified above added in ssh-agent. (<a href="https://docs.kubermatic.com/kubeone/v1.2/prerequisites/ssh/">Option exists to provide it directly as well without using sss-agent</a>). Use below script to add keys to ssh-agent.<pre class="language-shell"><code class="language-shell"><span class="token builtin class-name">eval</span> <span class="token variable"><span class="token variable">`</span>ssh-agent<span class="token variable">`</span></span><br>ssh-add ~/.ssh/id_rsa <span class="token comment"># or any other PEM private key!</span></code></pre>
 </li>
-<li>Once this done, create infrastructure using terraform<pre class="language-shell"><code class="language-shell">terraform init<br>terraform plan<br><span class="token comment"># for everything else except GCP</span><br>terraform apply<br><span class="token comment"># If using GCP... use below apply command</span><br><span class="token comment">#terraform apply -var=control_plane_target_pool_members_count=1</span><br><br><span class="token comment"># Copy the output in json format so that kubeone can use it to install infra on it</span><br>terraform output -json <span class="token operator">></span> tf.json</code></pre>
+<li>Once this done, create infrastructure using terraform<pre class="language-shell"><code class="language-shell">terraform init<br>terraform plan<br><span class="token comment"># for everything else except GCP</span><br>terraform apply<br><span class="token comment"># If using GCP... use below apply commands after downlading the service account json</span><br><span class="token comment"># export GOOGLE_CREDENTIALS=$(cat ./XXXX.json)</span><br><span class="token comment">#terraform apply -var=control_plane_target_pool_members_count=1</span><br><br><span class="token comment"># Copy the output in json format so that kubeone can use it to install infra on it</span><br>terraform output -json <span class="token operator">></span> tf.json</code></pre>
 </li>
 <li>Now create the minimal kubeone config yaml file.</li>
-<li>Use kubeone to create k8s cluster<pre class="language-shell"><code class="language-shell">kubeone apply --manifest kubeone.yaml -t tf.json</code></pre>
+<li>Use kubeone to create k8s cluster<pre class="language-shell"><code class="language-shell">kubeone apply --manifest kubeone.yaml -t tf.json --verbose</code></pre>
+</li>
+<li>Watch cluster getting setup<pre class="language-shell"><code class="language-shell"><span class="token comment"># Replace &lt;CLUSTER_NAME> with name of the cluster you provided in kubeone config yaml.</span><br><span class="token builtin class-name">export</span> <span class="token assign-left variable">KUBECONFIG</span><span class="token operator">=</span>./<span class="token operator">&lt;</span>CLUSTER_NAME<span class="token operator">></span>-kubeconfig<br>kubectl get md,ms,ma,node -n kube-system<br>kubectl get node -w</code></pre>
 </li>
 <li>Post installation, a kubeconfig file prefix as your project name will be created in the current working directory. You can use that kubeconfig to connect to new kubeone kubernetes cluster.</li>
 <li>You can also have additional addons</li>
+<li>To destroy<pre class="language-shell"><code class="language-shell">kubeone reset --manifest kubeone.yaml -t tf.json --verbose<br>terraform destroy</code></pre>
+</li>
 </ol>
 
         </div>
